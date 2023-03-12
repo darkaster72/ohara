@@ -8,9 +8,19 @@ export const bookRouter = createTRPCRouter({
       take: 10,
     });
   }),
-  getByAuthor: publicProcedure.input(z.string()).query(({ input, ctx }) => {
-    return ctx.prisma.book.findMany({
-      where: { authors: { some: { id: input } } },
-    });
-  }),
+  getByAuthor: publicProcedure
+    .input(z.string().nonempty())
+    .query(({ input, ctx }) => {
+      return ctx.prisma.book.findMany({
+        where: { authors: { some: { id: input } } },
+      });
+    }),
+  getById: publicProcedure
+    .input(z.string().nonempty())
+    .query(({ input, ctx }) => {
+      return ctx.prisma.book.findUniqueOrThrow({
+        where: { id: input },
+        include: { authors: true, publisher: true },
+      });
+    }),
 });

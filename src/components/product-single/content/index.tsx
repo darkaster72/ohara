@@ -1,15 +1,19 @@
-import { some } from "lodash";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "~/store";
-import { ProductStoreType, ProductType } from "~/types";
-import productsColors from "~/utils/data/products-colors";
-import productsSizes from "~/utils/data/products-sizes";
+import { ProductType } from "~/types";
+// import productsColors from "~/utils/data/products-colors";
+// import productsSizes from "~/utils/data/products-sizes";
 import CheckboxColor from "./../../products-filter/form-builder/checkbox-color";
 
 type ProductContent = {
   product: ProductType;
 };
+const productsTypes: {
+  id: string;
+  name: string;
+  count: string;
+}[] = [];
+const productsColors: { id: string; label: string; color: string }[] = [];
+const productsSizes: { id: string; label: string }[] = [];
 
 const Content = ({ product }: ProductContent) => {
   const [count, setCount] = useState<number>(1);
@@ -20,11 +24,11 @@ const Content = ({ product }: ProductContent) => {
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
     setItemSize(e.target.value);
 
-  const { favProducts } = useSelector((state: RootState) => state.user);
-  const isFavourite = some(
-    favProducts,
-    (productId) => productId === product.id
-  );
+  // const { favProducts } = useSelector((state: RootState) => state.user);
+  // const isFavourite = some(
+  //   favProducts,
+  //   (productId) => productId === product.id
+  // );
 
   const toggleFav = () => {
     // dispatch(
@@ -35,23 +39,23 @@ const Content = ({ product }: ProductContent) => {
   };
 
   const addToCart = () => {
-    const productToSave: ProductStoreType = {
-      id: product.id,
-      name: product.name,
-      thumb: product.images?.[0] ?? "",
-      price: product.currentPrice,
-      count: count,
-      color: color,
-      size: itemSize,
-    };
-
-    const productStore = {
-      count,
-      product: productToSave,
-    };
-
+    // const productToSave: ProductStoreType = {
+    //   id: product.id,
+    //   name: product.name,
+    //   thumb: product.images?.[0] ?? "",
+    //   price: product.currentPrice,
+    //   count: count,
+    //   color: color,
+    //   size: itemSize,
+    // };
+    // const productStore = {
+    //   count,
+    //   product: productToSave,
+    // };
     // dispatch(addProduct(productStore));
   };
+
+  const isFavourite = false;
 
   return (
     <section className="product-content">
@@ -61,11 +65,11 @@ const Content = ({ product }: ProductContent) => {
           {product.id}
         </h5>
         <span className="product-on-sale">Sale</span>
-        <h2 className="product__name">{product.name}</h2>
+        <h2 className="product__name">{product.title}</h2>
 
         <div className="product__prices">
-          <h4>${product.currentPrice}</h4>
-          {product.discount && <span>${product.price}</span>}
+          <h4>${product.currentPrice as any}</h4>
+          {product.discount && <span>${product.price as any}</span>}
         </div>
       </div>
 

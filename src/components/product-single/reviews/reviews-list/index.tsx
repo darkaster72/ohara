@@ -1,6 +1,6 @@
 import Rater from 'react-rater';
-import createMarkup from 'utils/markup';
-import { ReviewType } from 'types';
+import createMarkup from '~/utils/markup';
+import { ReviewType } from '~/types';
 
 type ReviewsListType = {
   reviews: ReviewType[];

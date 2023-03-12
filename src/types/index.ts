@@ -18,21 +18,7 @@ export type ReviewType = {
   punctuation: number;
 };
 
-export type ProductType = {
-  id: string;
-  name: string;
-  thumb: string;
-  price: string;
-  count: number;
-  color: string;
-  size: string;
-  images: string[];
-  discount?: string;
-  currentPrice: number;
-  punctuation: PunctuationType;
-  reviews: ReviewType[];
-};
-
+export type ProductType = RouterOutputs["book"]["getById"];
 export type ProductTypeList = RouterOutputs["book"]["getAll"][0];
 
 export type ProductStoreType = {
