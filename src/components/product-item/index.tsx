@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ProductTypeList } from "~/types";
 
 const ProductItem = ({
@@ -39,13 +40,15 @@ const ProductItem = ({
       </div>
 
       <div className="product__description">
-        <h3>{title}</h3>
+        <Link href={`/products/${id}`}>
+          <h3>{title}</h3>
+        </Link>
         <div
           className={
             "product__price " + (discount ? "product__price--discount" : "")
           }
         >
-          <h4>${currentPrice as any}</h4>
+          <h4>₹{currentPrice as any}</h4>
 
           {discount && <span>${price as any}</span>}
         </div>

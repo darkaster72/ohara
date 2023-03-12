@@ -5,6 +5,7 @@ export const bookRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.book.findMany({
       include: { authors: true, publisher: true },
+      take: 10,
     });
   }),
   getByAuthor: publicProcedure.input(z.string()).query(({ input, ctx }) => {

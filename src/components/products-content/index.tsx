@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import List from './list';
+import ProductList from './list';
 
 const ProductsContent = () => {
   const [orderProductsOpen, setOrderProductsOpen] = useState(false);
@@ -29,7 +29,7 @@ const ProductsContent = () => {
         </form>
       </div>
 
-      <List />
+      <ProductList />
     </section>
   );
 };

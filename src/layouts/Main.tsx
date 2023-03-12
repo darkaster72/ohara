@@ -1,6 +1,6 @@
-import Header from "components/header";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import Header from "~/components/header";
 
 type LayoutType = {
   title?: string;
