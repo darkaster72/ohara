@@ -57,6 +57,36 @@ model User {
     sessions      Session[]
 }
 
+model Author {
+    id   String @id @default(cuid())
+    name String @unique
+    Book Book[]
+}
+
+model Book {
+    id                String    @id @default(cuid())
+    title             String?
+    price             Decimal
+    discount          Decimal?
+    currentPrice      Decimal
+    quantityAvailable BigInt
+    authors           Author[]
+    averageRating     Decimal
+    isbn              String
+    isbn13            String
+    languageCode      String
+    numPages          Int
+    publictionDate    DateTime
+    publisher         Publisher @relation(fields: [publisherId], references: [id])
+    publisherId       String
+}
+
+model Publisher {
+    id   String @id @default(cuid())
+    name String @unique
+    Book Book[]
+}
+
 model VerificationToken {
     identifier String
     token      String   @unique
