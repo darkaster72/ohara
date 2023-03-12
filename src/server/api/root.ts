@@ -1,3 +1,4 @@
+import { inferRouterOutputs } from "@trpc/server";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { bookRouter } from "./routers/book";
 
