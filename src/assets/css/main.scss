@@ -1828,7 +1828,6 @@ h1,h2,h3,h4,h5 {
     display: flex;
     h4 {
       font-weight: 400;
-      color: #FF0000;
       font-size: 18px;
       @include breakpoint(phone) {
         font-size: 30px;

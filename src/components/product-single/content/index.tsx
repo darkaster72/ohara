@@ -1,8 +1,7 @@
+import Link from "next/link";
 import { useState } from "react";
 import { ProductType } from "~/types";
 // import productsColors from "~/utils/data/products-colors";
-// import productsSizes from "~/utils/data/products-sizes";
-import CheckboxColor from "./../../products-filter/form-builder/checkbox-color";
 
 type ProductContent = {
   product: ProductType;
@@ -17,12 +16,6 @@ const productsSizes: { id: string; label: string }[] = [];
 
 const Content = ({ product }: ProductContent) => {
   const [count, setCount] = useState<number>(1);
-  const [color, setColor] = useState<string>("");
-  const [itemSize, setItemSize] = useState<string>("");
-
-  const onColorSet = (e: string) => setColor(e);
-  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
-    setItemSize(e.target.value);
 
   // const { favProducts } = useSelector((state: RootState) => state.user);
   // const isFavourite = some(
@@ -60,49 +53,53 @@ const Content = ({ product }: ProductContent) => {
   return (
     <section className="product-content">
       <div className="product-content__intro">
-        <h5 className="product__id">
-          Product ID:<br></br>
-          {product.id}
-        </h5>
-        <span className="product-on-sale">Sale</span>
+        {product.discount && <span className="product-on-sale">Sale</span>}
         <h2 className="product__name">{product.title}</h2>
 
         <div className="product__prices">
-          <h4>${product.currentPrice as any}</h4>
-          {product.discount && <span>${product.price as any}</span>}
+          <h4>₹{product.currentPrice as any}</h4>
+          {product.discount && (
+            <span className="line-through">${product.price as any}</span>
+          )}
         </div>
       </div>
 
       <div className="product-content__filters">
         <div className="product-filter-item">
-          <h5>Color:</h5>
-          <div className="checkbox-color-wrapper">
-            {productsColors.map((type) => (
-              <CheckboxColor
-                key={type.id}
-                type={"radio"}
-                name="product-color"
-                color={type.color}
-                valueName={type.label}
-                onChange={onColorSet}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="product-filter-item">
           <h5>
-            Size: <strong>See size table</strong>
+            ISBN: <strong>{product.isbn}</strong>
           </h5>
-          <div className="checkbox-color-wrapper">
-            <div className="select-wrapper">
-              <select onChange={onSelectChange}>
-                <option>Choose size</option>
-                {productsSizes.map((type) => (
-                  <option value={type.label}>{type.label}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <h5>
+            No of Pages: <strong>{product.numPages}</strong>
+          </h5>
+          <h5>
+            Publication Date:{" "}
+            <strong>{product.publictionDate.toDateString()}</strong>
+          </h5>
+          <h5>
+            Publisher:{" "}
+            <strong>
+              <Link
+                className="hover:underline"
+                href={"/publishers/" + product.publisherId}
+              >
+                {product.publisher.name}
+              </Link>
+            </strong>
+          </h5>
+          <h5>
+            Author:{" "}
+            <span className="">
+              {product.authors.map((author) => (
+                <Link
+                  className="pr-1 after:content-[','] hover:underline"
+                  href={"/authors/" + author.id}
+                >
+                  {author.name}
+                </Link>
+              ))}
+            </span>
+          </h5>
         </div>
         <div className="product-filter-item">
           <h5>Quantity:</h5>
