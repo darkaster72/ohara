@@ -1,3 +1,4 @@
+import PageIntro from "~/components/page-intro";
 import Footer from "../components/footer";
 import ProductsFeatured from "../components/products-featured";
 import Subscribe from "../components/subscribe";
@@ -6,7 +7,7 @@ import Layout from "../layouts/Main";
 const IndexPage = () => {
   return (
     <Layout>
-      {/* <PageIntro /> */}
+      <PageIntro />
 
       <section className="featured">
         <div className="container">

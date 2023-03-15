@@ -6,7 +6,7 @@ import { api } from "~/utils/api";
 
 import "rc-slider/assets/index.css";
 import "react-rater/lib/react-rater.css";
-import "swiper/swiper.scss";
+import "swiper/css";
 import "~/styles/globals.css";
 import "../assets/css/styles.scss";
 

@@ -1,3 +1,5 @@
+import "swiper/css/autoplay";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { ProductTypeList } from "~/types";
 import ProductItem from "./../../product-item";
 
@@ -28,20 +30,21 @@ const ProductsCarousel = ({ products }: ProductsCarouselType) => {
 
   return (
     <div className="products-carousel">
-      {/* <Swiper
+      <Swiper
         spaceBetween={spaceBetween}
-        loop={true}
         centeredSlides={centeredSlides}
-        watchOverflow={true}
         slidesPerView={slidesPerView}
         className="swiper-wrapper"
-      > */}
-      {products.map((item) => (
-        // <SwiperSlide key={item.id}>
-        <ProductItem {...item} key={item.id} />
-        // </SwiperSlide>
-      ))}
-      {/* </Swiper> */}
+        autoplay
+        watchOverflow
+        loop
+      >
+        {products.map((item) => (
+          <SwiperSlide key={item.id}>
+            <ProductItem {...item} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };
