@@ -1,12 +1,16 @@
+import { useAtomValue } from "jotai";
 import { useState } from "react";
+import { searchQueryAtom } from "~/store/atoms";
 import ProductList from "./list";
 
 const ProductsContent = () => {
+  const searchQuery = useAtomValue(searchQueryAtom);
   const [orderProductsOpen, setOrderProductsOpen] = useState(false);
 
   return (
     <section className="products-content">
       <div className="products-content__intro">
+        {!!searchQuery && <h2>"{searchQuery}"</h2>}
         <button
           type="button"
           onClick={() => setOrderProductsOpen(!orderProductsOpen)}
