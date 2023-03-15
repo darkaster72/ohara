@@ -43,7 +43,7 @@ specifiers:
   reselect: ^4.0.0
   sass: ^1.26.10
   superjson: 1.9.1
-  swiper: ^6.5.1
+  swiper: ^9.1.0
   swr: ^0.3.2
   tailwindcss: ^3.2.0
   typescript: ^4.9.5
@@ -76,7 +76,7 @@ dependencies:
   reselect: 4.1.7
   sass: 1.59.2
   superjson: 1.9.1
-  swiper: 6.8.4
+  swiper: 9.1.0
   swr: 0.3.11_react@18.2.0
   use-onclickoutside: 0.3.2_pmekkgnqduwlme35zpnqhenc34
   zod: 3.21.4
@@ -1069,12 +1069,6 @@ packages:
 
   /dom-align/1.12.4:
     resolution: {integrity: sha512-R8LUSEay/68zE5c8/3BDxiTEvgb4xZTF0RKmAHfiEVN3klfIpXfi2/QCoiWPccVQ0J/ZGdz9OjzL4uJEP/MRAw==}
-    dev: false
-
-  /dom7/3.0.0:
-    resolution: {integrity: sha512-oNlcUdHsC4zb7Msx7JN3K0Nro1dzJ48knvBOnDPKJ2GV9wl1i5vydJZUSyOfrkKFDZEud/jBsTk92S/VGSAe/g==}
-    dependencies:
-      ssr-window: 3.0.0
     dev: false
 
   /electron-to-chromium/1.4.328:
@@ -2903,8 +2897,8 @@ packages:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
 
-  /ssr-window/3.0.0:
-    resolution: {integrity: sha512-q+8UfWDg9Itrg0yWK7oe5p/XRCJpJF9OBtXfOPgSJl+u3Xd5KI328RUEvUqSMVM9CiQUEf1QdBzJMkYGErj9QA==}
+  /ssr-window/4.0.2:
+    resolution: {integrity: sha512-ISv/Ch+ig7SOtw7G2+qkwfVASzazUnvlDTwypdLoPoySv+6MqlOV10VwPSE6EWkGjhW50lUmghPmpYZXMu/+AQ==}
     dev: false
 
   /stop-iteration-iterator/1.0.0:
@@ -2996,13 +2990,11 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /swiper/6.8.4:
-    resolution: {integrity: sha512-O+buF9Q+sMA0H7luMS8R59hCaJKlpo8PXhQ6ZYu6Rn2v9OsFd4d1jmrv14QvxtQpKAvL/ZiovEeANI/uDGet7g==}
+  /swiper/9.1.0:
+    resolution: {integrity: sha512-Ck8CywwfUghkbUAHbxTAWyeUAcNrIDNJ6EnKFBGGcHDjeqbh0Jq08RbmD5fMu1a0oOv1eIkUGVkqNJy/asm+yA==}
     engines: {node: '>= 4.7.0'}
-    requiresBuild: true
     dependencies:
-      dom7: 3.0.0
-      ssr-window: 3.0.0
+      ssr-window: 4.0.2
     dev: false
 
   /swr/0.3.11_react@18.2.0:
