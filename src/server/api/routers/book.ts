@@ -2,12 +2,22 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const bookRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.book.findMany({
-      include: { authors: true, publisher: true },
-      take: 10,
-    });
-  }),
+  getAll: publicProcedure
+    .input(z.string().optional())
+    .query(({ ctx, input }) => {
+      const searchQuery = input ? { title: { search: input } } : {};
+      return ctx.prisma.book.findMany({
+        where: searchQuery,
+        select: {
+          id: true,
+          title: true,
+          price: true,
+          currentPrice: true,
+          discount: true,
+        },
+        take: 20,
+      });
+    }),
   getByAuthor: publicProcedure
     .input(z.string().nonempty())
     .query(({ input, ctx }) => {

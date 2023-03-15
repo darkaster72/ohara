@@ -4,6 +4,7 @@ import { type AppType } from "next/app";
 
 import { api } from "~/utils/api";
 
+import { Provider } from "jotai";
 import "rc-slider/assets/index.css";
 import "react-rater/lib/react-rater.css";
 import "swiper/css";
@@ -15,9 +16,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
+    <Provider>
+      <SessionProvider session={session}>
+        <Component {...pageProps} />
+      </SessionProvider>
+    </Provider>
   );
 };
 

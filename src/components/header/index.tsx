@@ -1,7 +1,10 @@
+import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import useOnClickOutside from "use-onclickoutside";
+import { searchQueryAtom } from "~/store/atoms";
 import Logo from "../../assets/icons/logo";
 
 type HeaderType = {
@@ -10,7 +13,6 @@ type HeaderType = {
 
 const Header = ({ isErrorPage }: HeaderType) => {
   const router = useRouter();
-  // const { cartItems } = useSelector((state: RootState) => state.cart);
   const cartItems = [];
   const arrayPaths = ["/"];
 
@@ -18,7 +20,6 @@ const Header = ({ isErrorPage }: HeaderType) => {
     !arrayPaths.includes(router.pathname) || isErrorPage ? false : true
   );
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const navRef = useRef(null);
   const searchRef = useRef(null);
 
@@ -45,13 +46,17 @@ const Header = ({ isErrorPage }: HeaderType) => {
     setMenuOpen(false);
   };
 
-  const closeSearch = () => {
-    setSearchOpen(false);
-  };
-
   // on click outside
   useOnClickOutside(navRef, closeMenu);
-  useOnClickOutside(searchRef, closeSearch);
+  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
+
+  const { register, handleSubmit } = useForm<{ search: string }>({
+    defaultValues: { search: searchQuery },
+  });
+
+  const onSubmit = (value: { search: string }) => {
+    setSearchQuery(value.search);
+  };
 
   return (
     <header className={`site-header ${!onTop ? "site-header--fixed" : ""}`}>
@@ -75,25 +80,16 @@ const Header = ({ isErrorPage }: HeaderType) => {
         <div className="site-header__actions">
           <button
             ref={searchRef}
-            className={`search-form-wrapper ${
-              searchOpen ? "search-form--active" : ""
-            }`}
+            className={`search-form-wrapper search-form--active`}
           >
-            <form className={`search-form`}>
-              <i
-                className="icon-cancel"
-                onClick={() => setSearchOpen(!searchOpen)}
-              ></i>
+            <form className={`search-form`} onSubmit={handleSubmit(onSubmit)}>
+              <i className="icon-cancel"></i>
               <input
-                type="text"
-                name="search"
-                placeholder="Enter the product you are looking for"
+                placeholder="Enter the book you are looking for"
+                {...register("search")}
               />
             </form>
-            <i
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="icon-search"
-            ></i>
+            <i className="icon-search"></i>
           </button>
           <Link href="/cart">
             <button className="btn-cart">
