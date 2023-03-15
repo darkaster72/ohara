@@ -50,7 +50,7 @@ const ProductItem = ({
         >
           <h4>₹{currentPrice as any}</h4>
 
-          {discount && <span>${price as any}</span>}
+          {discount && <span className="line-through">₹{price as any}</span>}
         </div>
       </div>
     </div>
