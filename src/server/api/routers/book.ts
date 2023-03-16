@@ -18,6 +18,42 @@ export const bookRouter = createTRPCRouter({
         take: 20,
       });
     }),
+  infiniteBooks: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(), // <-- "cursor" needs to exist, but can be any type
+        search: z.string().nullish().default(null),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 50;
+      const { cursor, search } = input;
+      const items = await ctx.prisma.book.findMany({
+        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        select: {
+          id: true,
+          title: true,
+          price: true,
+          currentPrice: true,
+          discount: true,
+        },
+        where: search ? { title: { search } } : {},
+        cursor: cursor ? { id: cursor.valueOf() } : undefined,
+        orderBy: {
+          id: "asc",
+        },
+      });
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        nextCursor = Number(nextItem!.id);
+      }
+      return {
+        items,
+        nextCursor,
+      };
+    }),
   getByAuthor: publicProcedure
     .input(z.string().nonempty())
     .query(({ input, ctx }) => {

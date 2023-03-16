@@ -15,12 +15,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -59,13 +53,13 @@ model User {
 }
 
 model Author {
-    id   String @id @default(cuid())
+    id   BigInt @id @default(autoincrement())
     name String @unique
     Book Book[]
 }
 
 model Book {
-    id                String    @id @default(cuid())
+    id                BigInt    @id @default(autoincrement())
     title             String?
     price             Decimal
     discount          Decimal?
@@ -79,11 +73,11 @@ model Book {
     numPages          Int
     publictionDate    DateTime
     publisher         Publisher @relation(fields: [publisherId], references: [id])
-    publisherId       String
+    publisherId       BigInt
 }
 
 model Publisher {
-    id   String @id @default(cuid())
+    id   BigInt @id @default(autoincrement())
     name String @unique
     Book Book[]
 }

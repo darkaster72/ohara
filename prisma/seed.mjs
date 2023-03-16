@@ -17,9 +17,12 @@ const generatePrice = () => {
 const load = async () => {
   try {
     await prisma.book.deleteMany();
-    await prisma.author.deleteMany();
-    await prisma.publisher.deleteMany();
     console.log("Deleted records in book table");
+    await prisma.author.deleteMany();
+    console.log("Deleted records in author table");
+    await prisma.publisher.deleteMany();
+    console.log("Deleted records in publisher table");
+
     const authors = _.uniq(books.flatMap((book) => book.authors.split("/")));
     const publishers = _.uniq(books.map((book) => book.publisher));
     await prisma.publisher.createMany({
@@ -61,7 +64,8 @@ const load = async () => {
           },
         });
       } catch (e) {
-        console.log("Error adding record: ", book);
+        console.log("Error adding record: ", book.title);
+        console.log(e);
       }
     });
 

@@ -6,8 +6,12 @@ import ProductItem from "../../product-item";
 import ProductsLoading from "./loading";
 
 const ProductsContent = () => {
-  const searchQuery = useAtomValue(searchQueryAtom);
-  const { error, data } = api.book.getAll.useQuery(searchQuery);
+  const search = useAtomValue(searchQueryAtom);
+  const { error, data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    api.book.infiniteBooks.useInfiniteQuery(
+      { search, limit: 20 },
+      { getNextPageParam: (lastPage) => lastPage.nextCursor?.valueOf() }
+    );
 
   if (error) return <div>Failed to load users</div>;
   return (
@@ -16,10 +20,15 @@ const ProductsContent = () => {
 
       {data && (
         <section className="products-list">
-          {data.map((item: ProductTypeList) => (
-            <ProductItem {...item} key={item.id} />
-          ))}
+          {data.pages
+            .flatMap((p) => p.items)
+            .map((item: ProductTypeList) => (
+              <ProductItem {...item} key={item.id.toString()} />
+            ))}
         </section>
+      )}
+      {!isFetchingNextPage && hasNextPage && (
+        <button onClick={() => fetchNextPage()}>Load more</button>
       )}
     </>
   );
