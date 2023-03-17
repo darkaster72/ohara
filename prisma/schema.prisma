@@ -53,13 +53,13 @@ model User {
 }
 
 model Author {
-    id   BigInt @id @default(autoincrement())
+    id   Int    @id @default(autoincrement())
     name String @unique
     Book Book[]
 }
 
 model Book {
-    id                BigInt    @id @default(autoincrement())
+    id                Int        @id @default(autoincrement())
     title             String?
     price             Decimal
     discount          Decimal?
@@ -72,12 +72,12 @@ model Book {
     languageCode      String
     numPages          Int
     publictionDate    DateTime
-    publisher         Publisher @relation(fields: [publisherId], references: [id])
-    publisherId       BigInt
+    publisher         Publisher? @relation(fields: [publisherId], references: [id])
+    publisherId       Int?
 }
 
 model Publisher {
-    id   BigInt @id @default(autoincrement())
+    id   Int    @id @default(autoincrement())
     name String @unique
     Book Book[]
 }

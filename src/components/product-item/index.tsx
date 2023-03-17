@@ -23,26 +23,22 @@ const ProductItem = ({
   };
 
   return (
-    <div className="product-item">
+    <Link href={`/products/${id}`} className="product-item">
       <div className="product__image">
-        <button
+        {/* <button
           type="button"
           onClick={toggleFav}
           className={`btn-heart ${isFavourite ? "btn-heart--active" : ""}`}
         >
           <i className="icon-heart"></i>
-        </button>
+        </button> */}
 
-        {/* <Link href={`/product/${id}`}>
-          <img src={images ? images[0] : ""} alt="product" />
-          {discount && <span className="product__discount">{discount}%</span>}
-        </Link> */}
+        {/* <img src={images ? images[0] : ""} alt="product" /> */}
+        {discount && <span className="product__discount">{discount}% Off</span>}
       </div>
 
       <div className="product__description">
-        <Link href={`/products/${id}`}>
-          <h3>{title}</h3>
-        </Link>
+        <h3>{title}</h3>
         <div
           className={
             "product__price " + (discount ? "product__price--discount" : "")
@@ -53,7 +49,7 @@ const ProductItem = ({
           {discount && <span className="line-through">₹{price as any}</span>}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

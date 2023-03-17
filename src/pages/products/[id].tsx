@@ -11,8 +11,8 @@ import Layout from "../../layouts/Main";
 // types
 
 const Product = () => {
-  const id = useRouter().query.id as string;
-  const { data: product, isLoading } = api.book.getById.useQuery(id, {
+  const id = +(useRouter().query.id as string);
+  const { data: product, isLoading } = api.book.getByBookId.useQuery(id, {
     enabled: !!id,
   });
   const [showBlock, setShowBlock] = useState("description");

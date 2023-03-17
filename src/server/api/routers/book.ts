@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const bookRouter = createTRPCRouter({
-  getAll: publicProcedure
+  getAllBooks: publicProcedure
     .input(z.string().optional())
     .query(({ ctx, input }) => {
       const searchQuery = input ? { title: { search: input } } : {};
@@ -47,29 +47,29 @@ export const bookRouter = createTRPCRouter({
       let nextCursor: typeof cursor | undefined = undefined;
       if (items.length > limit) {
         const nextItem = items.pop();
-        nextCursor = Number(nextItem!.id);
+        nextCursor = nextItem!.id;
       }
       return {
         items,
         nextCursor,
       };
     }),
-  getByAuthor: publicProcedure
-    .input(z.string().nonempty())
+  getByAuthorId: publicProcedure
+    .input(z.number().int())
     .query(({ input, ctx }) => {
       return ctx.prisma.book.findMany({
         where: { authors: { some: { id: input } } },
       });
     }),
-  getByPublisher: publicProcedure
-    .input(z.string().nonempty())
+  getByPublisherId: publicProcedure
+    .input(z.number().int())
     .query(({ input, ctx }) => {
       return ctx.prisma.book.findMany({
         where: { publisherId: input },
       });
     }),
-  getById: publicProcedure
-    .input(z.string().nonempty())
+  getByBookId: publicProcedure
+    .input(z.number().int())
     .query(({ input, ctx }) => {
       return ctx.prisma.book.findUniqueOrThrow({
         where: { id: input },

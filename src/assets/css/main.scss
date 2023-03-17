@@ -879,7 +879,7 @@ h1,h2,h3,h4,h5 {
       font-size: 12px;
       z-index: 10;
       position: relative;
-      background-color: var(--color-red);
+      background-color: var(--color-orange);
     }
   }
   .product__description {
@@ -1862,7 +1862,7 @@ h1,h2,h3,h4,h5 {
     }
   }
   .product-on-sale {
-    background-color: #FF0000;
+    background-color: var(--color-orange);
     color: #FFF;
     font-size: 11px;
     font-weight: 500;

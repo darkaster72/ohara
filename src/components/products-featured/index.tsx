@@ -2,7 +2,7 @@ import { api } from "~/utils/api";
 import ProductsCarousel from "./carousel";
 
 const ProductsFeatured = () => {
-  const { data, isLoading } = api.book.getAll.useQuery();
+  const { data, isLoading } = api.book.getAllBooks.useQuery();
 
   return (
     <section className="section section-products-featured">

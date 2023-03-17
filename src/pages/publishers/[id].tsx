@@ -6,7 +6,7 @@ interface Props {}
 
 const PublisherPage: NextPage<Props> = () => {
   const { id } = useRouter().query;
-  const { data } = api.book.getByPublisher.useQuery(id as string, {
+  const { data } = api.book.getByPublisherId.useQuery(id as string, {
     enabled: !!id,
   });
   return (

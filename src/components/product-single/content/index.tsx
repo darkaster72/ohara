@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import Link from "next/link";
 import { useState } from "react";
 import { ProductType } from "~/types";
@@ -59,7 +60,7 @@ const Content = ({ product }: ProductContent) => {
         <div className="product__prices">
           <h4>₹{product.currentPrice as any}</h4>
           {product.discount && (
-            <span className="line-through">${product.price as any}</span>
+            <span className="line-through">₹{product.price as any}</span>
           )}
         </div>
       </div>
@@ -67,29 +68,37 @@ const Content = ({ product }: ProductContent) => {
       <div className="product-content__filters">
         <div className="product-filter-item">
           <h5>
-            ISBN: <strong>{product.isbn}</strong>
+            ISBN-10: <strong>{product.isbn}</strong>
+          </h5>
+          <h5>
+            ISBN-13: <strong>{product.isbn13}</strong>
           </h5>
           <h5>
             No of Pages: <strong>{product.numPages}</strong>
           </h5>
           <h5>
-            Publication Date:{" "}
-            <strong>{product.publictionDate.toDateString()}</strong>
+            Language: <strong>{product.languageCode}</strong>
           </h5>
           <h5>
-            Publisher:{" "}
+            Publication Date:{" "}
             <strong>
-              <Link
-                className="hover:underline"
-                href={"/publishers/" + product.publisherId}
-              >
-                {product.publisher.name}
-              </Link>
+              {DateTime.fromJSDate(product.publictionDate).toFormat(
+                "d MMM yyyy"
+              )}
             </strong>
           </h5>
           <h5>
+            Publisher:{" "}
+            <Link
+              className="text-blue-500 hover:underline"
+              href={"/publishers/" + product.publisherId}
+            >
+              {product.publisher.name}
+            </Link>
+          </h5>
+          <h5>
             Author:{" "}
-            <span className="">
+            <span className="text-blue-500">
               {product.authors.map((author) => (
                 <Link
                   className="pr-1 after:content-[','] hover:underline"

@@ -28,7 +28,14 @@ const ProductsContent = () => {
         </section>
       )}
       {!isFetchingNextPage && hasNextPage && (
-        <button onClick={() => fetchNextPage()}>Load more</button>
+        <div className="flex justify-center">
+          <button
+            className="btn btn--rounded btn--border"
+            onClick={() => fetchNextPage()}
+          >
+            Load more
+          </button>
+        </div>
       )}
     </>
   );
