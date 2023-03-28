@@ -8,6 +8,13 @@ export const bookRouter = createTRPCRouter({
       const searchQuery = input ? { title: { search: input } } : {};
       return ctx.prisma.book.findMany({
         where: searchQuery,
+        select: {
+          id: true,
+          title: true,
+          price: true,
+          currentPrice: true,
+          discount: true,
+        },
         take: 20,
       });
     }),
