@@ -75,6 +75,7 @@ const Content = ({ product }: ProductContent) => {
             <span className="text-blue-500">
               {product.authors.map((author) => (
                 <Link
+                  key={author.id}
                   className="pr-1 after:content-[','] hover:underline"
                   href={"/authors/" + author.id}
                 >

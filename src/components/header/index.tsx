@@ -1,4 +1,6 @@
 import { useAtom } from "jotai";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -22,6 +24,7 @@ const Header = ({ isErrorPage }: HeaderType) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navRef = useRef(null);
   const searchRef = useRef(null);
+  const { data: session } = useSession();
 
   const headerClass = () => {
     if (window.pageYOffset === 0) {
@@ -99,11 +102,19 @@ const Header = ({ isErrorPage }: HeaderType) => {
               )}
             </button>
           </Link>
-          <Link href="/login">
-            <button className="site-header__btn-avatar">
-              <i className="icon-avatar"></i>
-            </button>
-          </Link>
+          {session?.user.image && (
+            <Image
+              className="ml-2 inline-block rounded-full ring-2 ring-white"
+              src={session.user.image}
+              title={session.user.name ?? ""}
+              width="32"
+              height="32"
+              alt={session.user.name ?? "User Profile image"}
+            />
+          )}
+          <button onClick={() => (session?.user ? signOut() : signIn())}>
+            {session?.user ? "Logout" : "Login"}
+          </button>
           <button
             onClick={() => setMenuOpen(true)}
             className="site-header__btn-menu"
