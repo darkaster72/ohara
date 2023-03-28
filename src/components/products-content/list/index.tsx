@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { searchQueryAtom } from "~/store/atoms";
+import { searchQueryAtom } from "~/atoms/searchAtom";
 import { ProductTypeList } from "~/types";
 import { api } from "~/utils/api";
 import ProductItem from "../../product-item";

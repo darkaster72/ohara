@@ -37,3 +37,5 @@ export type GtagEventType = {
   label: string;
   value: string;
 };
+
+export type Cart = RouterOutputs["cart"]["getById"];

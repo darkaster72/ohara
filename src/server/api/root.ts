@@ -1,6 +1,6 @@
-import { inferRouterOutputs } from "@trpc/server";
 import { createTRPCRouter } from "~/server/api/trpc";
-import { bookRouter } from "./routers/book";
+import { bookRouter } from "./routers/bookRouter";
+import { CartRouter } from "./routers/cartRouter";
 
 /**
  * This is the primary router for your server.
@@ -9,6 +9,7 @@ import { bookRouter } from "./routers/book";
  */
 export const appRouter = createTRPCRouter({
   book: bookRouter,
+  cart: CartRouter,
 });
 
 // export type definition of API

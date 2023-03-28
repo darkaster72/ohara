@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useOnClickOutside from "use-onclickoutside";
-import { searchQueryAtom } from "~/store/atoms";
+import { searchQueryAtom } from "~/atoms/searchAtom";
 import Logo from "../../assets/icons/logo";
 
 type HeaderType = {

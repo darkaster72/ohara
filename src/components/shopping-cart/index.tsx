@@ -1,19 +1,11 @@
-import { useSelector } from "react-redux";
+import { useCart } from "~/hooks/useCart";
+import { usePrice } from "~/hooks/usePrice";
 import CheckoutStatus from "../../components/checkout-status";
 import Item from "./item";
-import { RootState } from "~/store";
 
 const ShoppingCart = () => {
-  const { cartItems } = useSelector((state: RootState) => state.cart);
-
-  const priceTotal = () => {
-    let totalPrice = 0;
-    if (cartItems.length > 0) {
-      cartItems.map((item) => (totalPrice += item.price * item.count));
-    }
-
-    return totalPrice;
-  };
+  const { cart, isLoading, isFetching } = useCart();
+  const { formattedPrice } = usePrice(cart?.totalPrice);
 
   return (
     <section className="cart">
@@ -24,7 +16,7 @@ const ShoppingCart = () => {
         </div>
 
         <div className="cart-list">
-          {cartItems.length > 0 && (
+          {cart && !cart.isEmpty && (
             <table>
               <tbody>
                 <tr>
@@ -36,23 +28,14 @@ const ShoppingCart = () => {
                   <th></th>
                 </tr>
 
-                {cartItems.map((item) => (
-                  <Item
-                    key={item.id}
-                    id={item.id}
-                    thumb={item.thumb}
-                    name={item.name}
-                    color={item.color}
-                    price={item.price}
-                    size={item.size}
-                    count={item.count}
-                  />
+                {cart.cartItems.map((item) => (
+                  <Item key={item.id} {...item} />
                 ))}
               </tbody>
             </table>
           )}
 
-          {cartItems.length === 0 && <p>Nothing in the cart</p>}
+          {cart?.isEmpty && <p>Nothing in the cart</p>}
         </div>
 
         <div className="cart-actions">
@@ -67,7 +50,7 @@ const ShoppingCart = () => {
 
           <div className="cart-actions__items-wrapper">
             <p className="cart-actions__total">
-              Total cost <strong>${priceTotal().toFixed(2)}</strong>
+              Total cost <strong>{formattedPrice}</strong>
             </p>
             <a href="/cart/checkout" className="btn btn--rounded btn--yellow">
               Checkout

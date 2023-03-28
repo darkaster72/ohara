@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import Link from "next/link";
-import { useState } from "react";
+import { useCart } from "~/hooks/useCart";
+import { usePrice } from "~/hooks/usePrice";
 import { ProductType } from "~/types";
 // import productsColors from "~/utils/data/products-colors";
 
@@ -12,44 +13,12 @@ const productsTypes: {
   name: string;
   count: string;
 }[] = [];
-const productsColors: { id: string; label: string; color: string }[] = [];
-const productsSizes: { id: string; label: string }[] = [];
-
 const Content = ({ product }: ProductContent) => {
-  const [count, setCount] = useState<number>(1);
-
-  // const { favProducts } = useSelector((state: RootState) => state.user);
-  // const isFavourite = some(
-  //   favProducts,
-  //   (productId) => productId === product.id
-  // );
-
-  const toggleFav = () => {
-    // dispatch(
-    //   toggleFavProduct({
-    //     id: product.id,
-    //   })
-    // );
-  };
-
-  const addToCart = () => {
-    // const productToSave: ProductStoreType = {
-    //   id: product.id,
-    //   name: product.name,
-    //   thumb: product.images?.[0] ?? "",
-    //   price: product.currentPrice,
-    //   count: count,
-    //   color: color,
-    //   size: itemSize,
-    // };
-    // const productStore = {
-    //   count,
-    //   product: productToSave,
-    // };
-    // dispatch(addProduct(productStore));
-  };
-
-  const isFavourite = false;
+  const { updateCartItem, cart } = useCart();
+  const addToCart = () => {};
+  const { formattedPrice, isDiscounted, originalPrice } = usePrice(
+    product.currentPrice
+  );
 
   return (
     <section className="product-content">
@@ -58,9 +27,9 @@ const Content = ({ product }: ProductContent) => {
         <h2 className="product__name">{product.title}</h2>
 
         <div className="product__prices">
-          <h4>₹{product.currentPrice as any}</h4>
-          {product.discount && (
-            <span className="line-through">₹{product.price as any}</span>
+          <h4>{formattedPrice}</h4>
+          {isDiscounted && (
+            <span className="line-through">{originalPrice}</span>
           )}
         </div>
       </div>
@@ -116,7 +85,7 @@ const Content = ({ product }: ProductContent) => {
             <div className="quantity-button">
               <button
                 type="button"
-                onClick={() => setCount(count - 1)}
+                onClick={() => updateQuantity(count - 1)}
                 className="quantity-button__btn"
               >
                 -
@@ -137,13 +106,6 @@ const Content = ({ product }: ProductContent) => {
               className="btn btn--rounded btn--yellow"
             >
               Add to cart
-            </button>
-            <button
-              type="button"
-              onClick={toggleFav}
-              className={`btn-heart ${isFavourite ? "btn-heart--active" : ""}`}
-            >
-              <i className="icon-heart"></i>
             </button>
           </div>
         </div>

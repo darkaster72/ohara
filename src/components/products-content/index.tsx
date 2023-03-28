@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai";
 import { useState } from "react";
-import { searchQueryAtom } from "~/store/atoms";
+import { searchQueryAtom } from "~/atoms/searchAtom";
 import ProductList from "./list";
 
 const ProductsContent = () => {
