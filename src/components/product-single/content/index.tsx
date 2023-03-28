@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import Link from "next/link";
+import { useState } from "react";
 import { useCart } from "~/hooks/useCart";
 import { usePrice } from "~/hooks/usePrice";
 import { ProductType } from "~/types";
@@ -8,17 +9,21 @@ import { ProductType } from "~/types";
 type ProductContent = {
   product: ProductType;
 };
+
 const productsTypes: {
   id: string;
   name: string;
   count: string;
 }[] = [];
+
 const Content = ({ product }: ProductContent) => {
-  const { updateCartItem, cart } = useCart();
+  const { updateCartItem, cart, getItem } = useCart();
   const addToCart = () => {};
   const { formattedPrice, isDiscounted, originalPrice } = usePrice(
     product.currentPrice
   );
+  const cartItem = getItem(product.id);
+  const [quantity, setQuantity] = useState(cartItem?.quantity ?? 1);
 
   return (
     <section className="product-content">
@@ -85,15 +90,16 @@ const Content = ({ product }: ProductContent) => {
             <div className="quantity-button">
               <button
                 type="button"
-                onClick={() => updateQuantity(count - 1)}
+                disabled={quantity === 0}
+                onClick={() => setQuantity((i) => i - 1)}
                 className="quantity-button__btn"
               >
                 -
               </button>
-              <span>{count}</span>
+              <span>{quantity}</span>
               <button
                 type="button"
-                onClick={() => setCount(count + 1)}
+                onClick={() => setQuantity((i) => i + 1)}
                 className="quantity-button__btn"
               >
                 +

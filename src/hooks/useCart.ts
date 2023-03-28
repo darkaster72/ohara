@@ -3,6 +3,7 @@ import { api } from "~/utils/api";
 
 import { Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { useCallback } from "react";
 import { cartIdAtom } from "~/atoms/cartAtom";
 import { ICart } from "~/server/api/routers/cartRouter";
 
@@ -64,6 +65,11 @@ export const useCart = () => {
     cartId && clearCartMutation(cartId);
   };
 
+  const getItem = useCallback(
+    (id: number) => cart?.cartItems.find((item) => item.id === id),
+    []
+  );
+
   return {
     cart: cart && new Cart(cart),
     isLoading,
@@ -71,6 +77,7 @@ export const useCart = () => {
     removeCartItem,
     updateCartItem,
     clearCart,
+    getItem,
   };
 };
 
