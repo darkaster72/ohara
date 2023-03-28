@@ -18,10 +18,10 @@ const productsTypes: {
 
 const Content = ({ product }: ProductContent) => {
   const { updateCartItem, cart, getItem } = useCart();
-  const addToCart = () => {};
-  const { formattedPrice, isDiscounted, originalPrice } = usePrice(
-    product.currentPrice
-  );
+  const addToCart = () => {
+    updateCartItem(product.id, quantity);
+  };
+  const { formattedPrice, isDiscounted, originalPrice } = usePrice(product);
   const cartItem = getItem(product.id);
   const [quantity, setQuantity] = useState(cartItem?.quantity ?? 1);
 

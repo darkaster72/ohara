@@ -50,6 +50,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    cart          Cart[]
 }
 
 model Author {
@@ -72,8 +73,9 @@ model Book {
     languageCode      String
     numPages          Int
     publictionDate    DateTime
-    publisher         Publisher? @relation(fields: [publisherId], references: [id])
-    publisherId       Int?
+    publisher         Publisher  @relation(fields: [publisherId], references: [id])
+    publisherId       Int
+    CartItem          CartItem[]
 }
 
 model Publisher {
@@ -88,4 +90,20 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Cart {
+    code      String     @id @default(cuid())
+    cartItems CartItem[]
+    user      User       @relation(fields: [userId], references: [id])
+    userId    String
+}
+
+model CartItem {
+    id       Int    @id @default(autoincrement())
+    quantity Int
+    book     Book   @relation(fields: [bookId], references: [id])
+    bookId   Int
+    cart     Cart   @relation(fields: [cartCode], references: [code])
+    cartCode String
 }

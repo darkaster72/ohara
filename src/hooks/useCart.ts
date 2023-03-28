@@ -4,14 +4,14 @@ import { api } from "~/utils/api";
 import { Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useCallback } from "react";
-import { cartIdAtom } from "~/atoms/cartAtom";
-import { ICart } from "~/server/api/routers/cartRouter";
+import { cartCode } from "~/atoms/cartAtom";
+import { ICart, ICartItem } from "~/server/api/routers/cartRouter";
 
 const cartApi = api.cart;
 
 export const useCart = () => {
   const { status } = useSession();
-  const [cartId, setCartId] = useAtom(cartIdAtom);
+  const [cartId, setCartId] = useAtom(cartCode);
   const utils = api.useContext();
 
   const {
@@ -24,7 +24,7 @@ export const useCart = () => {
 
   const { mutate: createCartMutation } = cartApi.createCart.useMutation({
     onSuccess: (cart) => {
-      setCartId(cart.id);
+      setCartId(cart.code);
     },
   });
 
@@ -41,7 +41,7 @@ export const useCart = () => {
   const updateCartItem = async (productId: number, quantity?: number) => {
     if (cartId) {
       updateCartItemMutation({
-        cartId: cartId,
+        cartCode: cartId,
         productId: productId,
         quantity,
       });
@@ -55,7 +55,7 @@ export const useCart = () => {
       throw new Error("Cart note available");
     }
     updateCartItemMutation({
-      cartId: cartId,
+      cartCode: cartId,
       productId: productId,
       quantity: 0,
     });
@@ -81,11 +81,15 @@ export const useCart = () => {
   };
 };
 
-class Cart {
-  constructor(private data: ICart) {}
+class Cart implements ICart {
+  userId: string;
+  cartItems: ICartItem[];
+  code: string;
 
-  get cartItems() {
-    return this.data.cartItems;
+  constructor(private data: ICart) {
+    this.cartItems = data.cartItems.map((p) => new CartItem(p));
+    this.userId = data.userId;
+    this.code = data.code;
   }
 
   get isEmpty() {
@@ -93,21 +97,39 @@ class Cart {
   }
 
   get totalPrice() {
-    return this.data.cartItems.reduce(
-      (acc, item) => acc.plus(item.product.currentPrice.mul(item.quantity)),
+    return this.cartItems.reduce(
+      (acc, item) => acc.plus(item.book.currentPrice.mul(item.quantity)),
       new Prisma.Decimal(0)
     );
   }
 
   get totalQuantity() {
-    return this.data.cartItems.reduce((acc, curr) => acc + curr.quantity, 0);
+    return this.cartItems.reduce((acc, curr) => acc + curr.quantity, 0);
   }
 
   hasCartItem(productId: number) {
-    return this.cartItems.some((p) => p.product.id === productId);
+    return this.cartItems.some((p) => p.book.id === productId);
   }
 
   getCartItem(productId: number) {
-    return this.cartItems.find((p) => p.product.id === productId);
+    return this.cartItems.find((p) => p.book.id === productId);
+  }
+}
+
+class CartItem implements ICartItem {
+  book: ICartItem["book"];
+  id: number;
+  quantity: number;
+
+  constructor(private data: ICartItem) {
+    const book = data.book;
+    this.book = {
+      ...book,
+      currentPrice: new Prisma.Decimal(book.currentPrice),
+      discount: new Prisma.Decimal(book.discount ?? 0),
+      price: new Prisma.Decimal(book.price),
+    };
+    this.quantity = data.quantity;
+    this.id = data.id;
   }
 }

@@ -2,9 +2,9 @@ import { useCart } from "~/hooks/useCart";
 import { usePrice } from "~/hooks/usePrice";
 import { ICartItem } from "~/server/api/routers/cartRouter";
 
-const ShoppingCartItem = ({ product, quantity }: ICartItem) => {
+const ShoppingCartItem = ({ book, quantity }: ICartItem) => {
   const { updateCartItem, removeCartItem } = useCart();
-  const { formattedPrice } = usePrice(product.currentPrice);
+  const { formattedPrice } = usePrice(book);
 
   return (
     <tr>
@@ -15,8 +15,8 @@ const ShoppingCartItem = ({ product, quantity }: ICartItem) => {
           </div>
 
           <div className="cart-product__content">
-            <h3>{product.title}</h3>
-            <p>#{product.id}</p>
+            <h3>{book.title}</h3>
+            <p>#{book.id}</p>
           </div>
         </div>
       </td>
@@ -24,7 +24,7 @@ const ShoppingCartItem = ({ product, quantity }: ICartItem) => {
         <div className="quantity-button">
           <button
             type="button"
-            onClick={() => updateCartItem(product.id, quantity + 1)}
+            onClick={() => updateCartItem(book.id, quantity - 1)}
             className="quantity-button__btn"
           >
             -
@@ -32,7 +32,7 @@ const ShoppingCartItem = ({ product, quantity }: ICartItem) => {
           <span>{quantity}</span>
           <button
             type="button"
-            onClick={() => updateCartItem(product.id, quantity - 1)}
+            onClick={() => updateCartItem(book.id, quantity + 1)}
             className="quantity-button__btn"
           >
             +
@@ -41,10 +41,7 @@ const ShoppingCartItem = ({ product, quantity }: ICartItem) => {
       </td>
       <td>{formattedPrice}</td>
       <td className="cart-item-cancel">
-        <i
-          className="icon-cancel"
-          onClick={() => removeCartItem(product.id)}
-        ></i>
+        <i className="icon-cancel" onClick={() => removeCartItem(book.id)}></i>
       </td>
     </tr>
   );

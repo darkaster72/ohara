@@ -8,16 +8,16 @@ import {
 
 const CartItemUpdateSchema = z.object({
   productId: z.number().int(),
-  quantity: z.number().int().positive().default(1),
+  quantity: z.number().int().default(1),
 });
 
-const CartIdSchema = z.object({
-  cartId: z.number().int(),
+const CartCodeSchema = z.object({
+  cartCode: z.string().cuid(),
 });
 
 export const CartRouter = createTRPCRouter({
   getById: protectedProcedure
-    .input(z.number().int())
+    .input(z.string().cuid())
     .query(({ ctx, input }) => getCartById(ctx, input)),
   createCart: protectedProcedure
     .input(CartItemUpdateSchema)
@@ -31,38 +31,40 @@ export const CartRouter = createTRPCRouter({
       });
     }),
   updateCartItem: protectedProcedure
-    .input(CartItemUpdateSchema.merge(CartIdSchema))
-    .mutation(async ({ ctx, input: { cartId, productId, quantity } }) => {
-      const cart: ICart = await getCartById(ctx, cartId);
+    .input(CartItemUpdateSchema.merge(CartCodeSchema))
+    .mutation(async ({ ctx, input: { cartCode, productId, quantity } }) => {
+      const cart: ICart = await getCartById(ctx, cartCode);
       const existingCartItem = cart.cartItems.find(
-        (item) => item.product.id === productId
+        (item) => item.book.id === productId
       );
       const removeProduct = quantity === 0;
 
       if (existingCartItem) {
         if (removeProduct) {
           await ctx.prisma.cart.update({
-            where: { id: cartId },
+            where: { code: cartCode },
             data: { cartItems: { delete: { id: existingCartItem.id } } },
           });
         }
-        existingCartItem.quantity += 1;
+
         await ctx.prisma.cartItem.update({
           where: { id: existingCartItem.id },
-          data: { quantity: existingCartItem.quantity + 1 },
+          data: { quantity: quantity },
         });
       } else if (!removeProduct) {
         await ctx.prisma.cart.update({
-          where: { id: cartId },
-          data: { cartItems: { create: { bookId: productId, quantity: 1 } } },
+          where: { code: cartCode },
+          data: {
+            cartItems: { create: { bookId: productId, quantity } },
+          },
         });
       }
     }),
   clearCart: protectedProcedure
-    .input(z.number().int())
-    .mutation(async ({ ctx, input: cartId }) => {
+    .input(z.string().cuid())
+    .mutation(async ({ ctx, input: cartCode }) => {
       await ctx.prisma.cart.update({
-        where: { id: cartId },
+        where: { code: cartCode },
         data: { cartItems: { deleteMany: {} } },
       });
     }),
@@ -71,17 +73,17 @@ export const CartRouter = createTRPCRouter({
 export type ICart = inferAsyncReturnType<typeof getCartById>;
 export type ICartItem = ICart["cartItems"][0];
 
-async function getCartById(ctx: TRPCContext, id: number) {
+async function getCartById(ctx: TRPCContext, code: string) {
   return await ctx.prisma.cart.findUniqueOrThrow({
-    where: { id },
+    where: { code },
     select: {
-      id: true,
+      code: true,
       userId: true,
       cartItems: {
         select: {
           id: true,
           quantity: true,
-          product: {
+          book: {
             select: {
               id: true,
               price: true,
