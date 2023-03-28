@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useOnClickOutside from "use-onclickoutside";
 import { searchQueryAtom } from "~/atoms/searchAtom";
+import { useCart } from "~/hooks/useCart";
 import Logo from "../../assets/icons/logo";
 
 type HeaderType = {
@@ -15,7 +16,6 @@ type HeaderType = {
 
 const Header = ({ isErrorPage }: HeaderType) => {
   const router = useRouter();
-  const cartItems = [];
   const arrayPaths = ["/"];
 
   const [onTop, setOnTop] = useState(
@@ -25,6 +25,7 @@ const Header = ({ isErrorPage }: HeaderType) => {
   const navRef = useRef(null);
   const searchRef = useRef(null);
   const { data: session } = useSession();
+  const { cart } = useCart();
 
   const headerClass = () => {
     if (window.pageYOffset === 0) {
@@ -80,7 +81,7 @@ const Header = ({ isErrorPage }: HeaderType) => {
           </button>
         </nav>
 
-        <div className="site-header__actions">
+        <div className="site-header__actions gap-2">
           <button
             ref={searchRef}
             className={`search-form-wrapper search-form--active`}
@@ -95,10 +96,10 @@ const Header = ({ isErrorPage }: HeaderType) => {
             <i className="icon-search"></i>
           </button>
           <Link href="/cart">
-            <button className="btn-cart">
+            <button className="btn-cart ml-2">
               <i className="icon-cart"></i>
-              {cartItems.length > 0 && (
-                <span className="btn-cart__count">{cartItems.length}</span>
+              {!cart?.isEmpty && (
+                <span className="btn-cart__count">{cart?.totalQuantity}</span>
               )}
             </button>
           </Link>
