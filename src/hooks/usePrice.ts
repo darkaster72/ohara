@@ -11,9 +11,9 @@ const formatter = new Intl.NumberFormat("en-US", {
 const DecimalZero = new Prisma.Decimal(0);
 export function usePrice(
   price:
-    | ICartItem["product"]["currentPrice"]
+    | ICartItem["book"]["currentPrice"]
     | Pick<
-        ICartItem["product"],
+        ICartItem["book"],
         "price" | "currentPrice" | "discount"
       > = DecimalZero
 ) {
