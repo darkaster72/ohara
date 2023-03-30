@@ -2469,6 +2469,9 @@ h1,h2,h3,h4,h5 {
       height: 49px;
       padding: 0 28px;
     }
+    &.error {
+      @apply border-red-500
+    }
   }
   .select-wrapper {
     height: 100%;

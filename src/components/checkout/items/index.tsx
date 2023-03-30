@@ -6,7 +6,9 @@ const CheckoutItems = () => {
   const { cart } = useCart();
   return (
     <ul className="checkout-items">
-      {cart?.cartItems.map((item) => CheckoutItem({ item }))}
+      {cart?.cartItems.map((item) => (
+        <CheckoutItem item={item} key={item.id} />
+      ))}
     </ul>
   );
 };
