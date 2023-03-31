@@ -15,6 +15,19 @@ const CartCodeSchema = z.object({
   cartCode: z.string().cuid(),
 });
 
+const ShippingAddressUpdateSchema = z.object({
+  cartCode: z.string().cuid(),
+  address: z.object({
+    fullName: z.string(),
+    city: z.string(),
+    state: z.string(),
+    address: z.string(),
+    country: z.string(),
+    phone: z.string(),
+    postalCode: z.string(),
+  }),
+});
+
 export const CartRouter = createTRPCRouter({
   getById: protectedProcedure
     .input(z.string().cuid())
@@ -60,6 +73,18 @@ export const CartRouter = createTRPCRouter({
         });
       }
     }),
+  updateAddress: protectedProcedure
+    .input(ShippingAddressUpdateSchema)
+    .mutation(async ({ ctx, input: { cartCode, address } }) => {
+      await ctx.prisma.cart.update({
+        where: { code: cartCode },
+        data: {
+          address: {
+            upsert: { create: { ...address }, update: { ...address } },
+          },
+        },
+      });
+    }),
   clearCart: protectedProcedure
     .input(z.string().cuid())
     .mutation(async ({ ctx, input: cartCode }) => {
@@ -92,6 +117,17 @@ async function getCartById(ctx: TRPCContext, code: string) {
               title: true,
             },
           },
+        },
+      },
+      address: {
+        select: {
+          address: true,
+          city: true,
+          state: true,
+          country: true,
+          postalCode: true,
+          fullName: true,
+          phone: true,
         },
       },
     },

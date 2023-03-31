@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useCallback } from "react";
 import { cartCode } from "~/atoms/cartAtom";
+import { ShippingForm } from "~/components/shipping-form";
 import { ICart, ICartItem } from "~/server/api/routers/cartRouter";
 
 const cartApi = api.cart;
@@ -34,6 +35,10 @@ export const useCart = () => {
     }
   );
 
+  const { mutate: updateAddressMutation } = cartApi.updateAddress.useMutation({
+    onSuccess: () => utils.cart.invalidate(),
+  });
+
   const { mutate: clearCartMutation } = cartApi.clearCart.useMutation({
     onSuccess: () => utils.cart.invalidate(),
   });
@@ -50,10 +55,14 @@ export const useCart = () => {
     }
   };
 
+  const updateAddress = (address: ShippingForm) => {
+    if (!cartId) throw new Error("Cart note available");
+    updateAddressMutation({ address, cartCode: cartId });
+  };
+
   const removeCartItem = async (productId: number) => {
-    if (!cartId) {
-      throw new Error("Cart note available");
-    }
+    if (!cartId) throw new Error("Cart note available");
+
     updateCartItemMutation({
       cartCode: cartId,
       productId: productId,
@@ -78,6 +87,7 @@ export const useCart = () => {
     updateCartItem,
     clearCart,
     getItem,
+    updateAddress,
   };
 };
 
@@ -85,11 +95,13 @@ class Cart implements ICart {
   userId: string;
   cartItems: ICartItem[];
   code: string;
+  address: ShippingForm | null;
 
-  constructor(private data: ICart) {
+  constructor(data: ICart) {
     this.cartItems = data.cartItems.map((p) => new CartItem(p));
     this.userId = data.userId;
     this.code = data.code;
+    this.address = data.address;
   }
 
   get isEmpty() {

@@ -1,10 +1,9 @@
-import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useCart } from "~/hooks/useCart";
 import FormField from "../form-field";
 
-interface ShippingForm {
-  email: string;
+export interface ShippingForm {
   fullName: string;
   city: string;
   state: string;
@@ -18,36 +17,28 @@ const FormDefaultValue: ShippingForm = {
   country: "India",
   address: "",
   city: "",
-  email: "",
   fullName: "",
   phone: "",
   postalCode: "",
   state: "",
 };
 export default function ShippingAddress() {
-  const { data: session } = useSession();
-  const { setValue, handleSubmit, control, formState, getValues } =
-    useForm<ShippingForm>({
-      defaultValues: FormDefaultValue,
-    });
+  const { cart, updateAddress } = useCart();
+  const { handleSubmit, control, reset } = useForm<ShippingForm>({
+    defaultValues: FormDefaultValue,
+  });
   const onSubmit = (value: ShippingForm) => {
-    console.log(value);
+    updateAddress(value);
   };
-
   useEffect(() => {
-    session?.user.email && setValue("email", session.user.email);
-  }, [session]);
-
-  //   console.log("Errors:", formState.errors);
-  //   console.log("Fields", getValues());
+    cart?.address && reset(cart.address);
+  }, [cart?.address, reset]);
 
   return (
     <div className="block">
       <h3 className="block__title">Shipping information</h3>
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="form__input-row form__input-row--two">
-          <FormField control={control} name="email" placeholder="Email" />
-
+        <div className="form__input-row">
           <FormField control={control} name="address" placeholder="Address" />
         </div>
 
