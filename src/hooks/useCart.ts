@@ -47,13 +47,20 @@ export const useCart = () => {
     onSuccess: () => utils.cart.invalidate(),
   });
 
-  const updateCartItem = async (productId: number, quantity?: number) => {
+  const updateCartItem = async (
+    productId: number,
+    quantity?: number,
+    callback?: Parameters<typeof updateCartItemMutation>[1]
+  ) => {
     if (cartId) {
-      updateCartItemMutation({
-        cartCode: cartId,
-        productId: productId,
-        quantity,
-      });
+      updateCartItemMutation(
+        {
+          cartCode: cartId,
+          productId: productId,
+          quantity,
+        },
+        callback
+      );
     } else {
       createCartMutation({ productId, quantity });
     }
