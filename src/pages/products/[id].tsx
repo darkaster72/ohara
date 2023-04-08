@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useImage } from "~/hooks/useImage";
 import { api } from "~/utils/api";
 import Breadcrumb from "../../components/breadcrumb";
 import Footer from "../../components/footer";
@@ -10,10 +10,11 @@ import Layout from "../../layouts/Main";
 
 const Product = () => {
   const id = +(useRouter().query.id as string);
-  const { data: product, isLoading } = api.book.getByBookId.useQuery(id, {
+  const { data: product } = api.book.getByBookId.useQuery(id, {
     enabled: !!id,
   });
-  const [showBlock, setShowBlock] = useState("description");
+
+  const url = useImage(product);
 
   return (
     <Layout>
@@ -21,7 +22,7 @@ const Product = () => {
       <section className="product-single">
         <div className="container">
           <div className="product-single__content">
-            <Gallery images={[]} />
+            <Gallery images={[url]} />
             {product && <Content product={product} />}
           </div>
         </div>

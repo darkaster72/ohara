@@ -18,7 +18,7 @@ export type ReviewType = {
   punctuation: number;
 };
 
-export type ProductType = RouterOutputs["book"]["getByBookId"];
+export type IProduct = RouterOutputs["book"]["getByBookId"];
 export type ProductTypeList = RouterOutputs["book"]["getAllBooks"][0];
 
 export type ProductStoreType = {

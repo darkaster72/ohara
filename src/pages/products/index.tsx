@@ -1,15 +1,14 @@
-import Layout from "~/layouts/Main";
-import Footer from "~/components/footer";
 import Breadcrumb from "~/components/breadcrumb";
-import ProductsFilter from "~/components/products-filter";
+import Footer from "~/components/footer";
 import ProductsContent from "~/components/products-content";
+import Layout from "~/layouts/Main";
 
 const Products = () => (
   <Layout>
     <Breadcrumb />
     <section className="products-page">
       <div className="container">
-        <ProductsFilter />
+        {/* <ProductsFilter /> */}
         <ProductsContent />
       </div>
     </section>

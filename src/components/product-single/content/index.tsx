@@ -5,10 +5,10 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useCart } from "~/hooks/useCart";
 import { usePrice } from "~/hooks/usePrice";
-import { ProductType } from "~/types";
+import { IProduct } from "~/types";
 
 type ProductContent = {
-  product: ProductType;
+  product: IProduct;
 };
 
 const Content = ({ product }: ProductContent) => {

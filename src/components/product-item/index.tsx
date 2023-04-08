@@ -1,17 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
+import { useImage } from "~/hooks/useImage";
 import { usePrice } from "~/hooks/usePrice";
 import { ProductTypeList } from "~/types";
 
 const ProductItem = (item: ProductTypeList) => {
   const { id, title } = item;
-  const isFavourite = false;
   const { discount, isDiscounted, formattedPrice, originalPrice } =
     usePrice(item);
-
+  const image = useImage(item);
   return (
     <Link href={`/products/${id}`} className="product-item">
       <div className="product__image">
-        {/* <img src={images ? images[0] : ""} alt="product" /> */}
+        <Image src={image} alt={item.title ?? ""} fill />
         {isDiscounted && (
           <span className="product__discount">
             {discount.round().toNumber()}% Off
