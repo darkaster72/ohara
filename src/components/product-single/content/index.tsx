@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { useCart } from "~/hooks/useCart";
 import { usePrice } from "~/hooks/usePrice";
 import { ProductType } from "~/types";
@@ -17,7 +18,9 @@ const Content = ({ product }: ProductContent) => {
     if (status === "unauthenticated") {
       signIn();
     }
-    updateCartItem(product.id, quantity);
+    updateCartItem(product.id, quantity, {
+      onSuccess: () => toast.success("Added to cart"),
+    });
   };
   const { formattedPrice, isDiscounted, originalPrice } = usePrice(product);
   const cartItem = getItem(product.id);

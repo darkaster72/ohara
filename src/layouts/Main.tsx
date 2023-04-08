@@ -7,7 +7,7 @@ type LayoutType = {
   children?: React.ReactNode;
 };
 
-export default ({ children, title = "Ohara" }: LayoutType) => {
+const Layout = ({ children, title = "Ohara" }: LayoutType) => {
   const router = useRouter();
   const pathname = router.pathname;
 
@@ -23,3 +23,5 @@ export default ({ children, title = "Ohara" }: LayoutType) => {
     </div>
   );
 };
+
+export default Layout;
