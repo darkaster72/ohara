@@ -39,7 +39,7 @@ const OrderPage = () => {
                 Cart
               </p>
               {order.lineItems.map((item) => (
-                <OrderLineItem item={item} />
+                <OrderLineItem key={item.id} item={item} />
               ))}
             </div>
             <div className="flex w-full flex-col items-stretch justify-center space-y-4 md:flex-row md:space-y-0 md:space-x-6 xl:space-x-8">
