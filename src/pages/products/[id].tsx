@@ -8,8 +8,6 @@ import Gallery from "../../components/product-single/gallery";
 import ProductsFeatured from "../../components/products-featured";
 import Layout from "../../layouts/Main";
 
-// types
-
 const Product = () => {
   const id = +(useRouter().query.id as string);
   const { data: product, isLoading } = api.book.getByBookId.useQuery(id, {
