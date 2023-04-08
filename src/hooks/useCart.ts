@@ -36,7 +36,9 @@ export const useCart = () => {
   );
 
   const { mutate: placeOrderMutation } = cartApi.placeOrder.useMutation({
-    onSuccess: () => utils.cart.invalidate(),
+    onSuccess: () => {
+      utils.cart.invalidate(), setCartId(null);
+    },
   });
 
   const { mutate: updateAddressMutation } = cartApi.updateAddress.useMutation({
