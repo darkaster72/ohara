@@ -98,7 +98,7 @@ const Header = ({ isErrorPage }: HeaderType) => {
           <Link href="/cart">
             <button className="btn-cart ml-2">
               <i className="icon-cart"></i>
-              {!cart?.isEmpty && (
+              {!(cart?.isEmpty ?? true) && (
                 <span className="btn-cart__count">{cart?.totalQuantity}</span>
               )}
             </button>

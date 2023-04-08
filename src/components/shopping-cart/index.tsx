@@ -5,7 +5,7 @@ import Item from "./item";
 
 const ShoppingCart = () => {
   const { cart, isLoading, isFetching } = useCart();
-  const { formattedPrice } = usePrice(cart?.totalPrice);
+  const { formattedPrice } = usePrice(cart?.total);
 
   return (
     <section className="cart">

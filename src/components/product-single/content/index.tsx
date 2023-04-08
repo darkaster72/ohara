@@ -1,24 +1,22 @@
 import { DateTime } from "luxon";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "~/hooks/useCart";
 import { usePrice } from "~/hooks/usePrice";
 import { ProductType } from "~/types";
-// import productsColors from "~/utils/data/products-colors";
 
 type ProductContent = {
   product: ProductType;
 };
 
-const productsTypes: {
-  id: string;
-  name: string;
-  count: string;
-}[] = [];
-
 const Content = ({ product }: ProductContent) => {
   const { updateCartItem, cart, getItem } = useCart();
+  const { status } = useSession();
   const addToCart = () => {
+    if (status === "unauthenticated") {
+      signIn();
+    }
     updateCartItem(product.id, quantity);
   };
   const { formattedPrice, isDiscounted, originalPrice } = usePrice(product);

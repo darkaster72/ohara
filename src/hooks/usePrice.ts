@@ -31,6 +31,6 @@ export function usePrice(
     formattedPrice: formatter.format(currentPrice.toNumber()),
     originalPrice: formatter.format(originalPrice.toNumber()),
     discount,
-    isDiscounted: !discount.isZero,
+    isDiscounted: !discount.isZero(),
   };
 }

@@ -35,6 +35,10 @@ export const useCart = () => {
     }
   );
 
+  const { mutate: placeOrderMutation } = cartApi.placeOrder.useMutation({
+    onSuccess: () => utils.cart.invalidate(),
+  });
+
   const { mutate: updateAddressMutation } = cartApi.updateAddress.useMutation({
     onSuccess: () => utils.cart.invalidate(),
   });
@@ -58,6 +62,11 @@ export const useCart = () => {
   const updateAddress = (address: ShippingForm) => {
     if (!cartId) throw new Error("Cart note available");
     updateAddressMutation({ address, cartCode: cartId });
+  };
+
+  const placeOrder = (callback?: Parameters<typeof placeOrderMutation>[1]) => {
+    if (!cartId) throw new Error("Cart note available");
+    placeOrderMutation(cartId, callback);
   };
 
   const removeCartItem = async (productId: number) => {
@@ -88,6 +97,7 @@ export const useCart = () => {
     clearCart,
     getItem,
     updateAddress,
+    placeOrder,
   };
 };
 
@@ -96,16 +106,24 @@ class Cart implements ICart {
   cartItems: ICartItem[];
   code: string;
   address: ShippingForm | null;
+  subtotal: Prisma.Decimal;
+  total: Prisma.Decimal;
 
   constructor(data: ICart) {
     this.cartItems = data.cartItems.map((p) => new CartItem(p));
     this.userId = data.userId;
     this.code = data.code;
     this.address = data.address;
+    this.subtotal = new Prisma.Decimal(data.subtotal);
+    this.total = new Prisma.Decimal(data.total);
   }
 
-  get isEmpty() {
+  get isEmpty(): boolean {
     return this.cartItems.length === 0;
+  }
+
+  get isValid(): boolean {
+    return !this.isEmpty || !!this.address;
   }
 
   get totalPrice() {

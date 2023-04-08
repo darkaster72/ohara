@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 import ShippingAddress from "~/components/shipping-form";
 import { useCart } from "~/hooks/useCart";
 import { usePrice } from "~/hooks/usePrice";
@@ -7,9 +9,19 @@ import CheckoutItems from "../../components/checkout/items";
 import Layout from "../../layouts/Main";
 
 const CheckoutPage = () => {
-  const { cart } = useCart();
-  const { formattedPrice } = usePrice(cart?.totalPrice);
-  const onPlaceOrder = () => {};
+  const router = useRouter();
+  const { cart, placeOrder } = useCart();
+  const { formattedPrice } = usePrice(cart?.total);
+
+  const onPlaceOrder = () => {
+    if (!cart?.isValid) {
+      toast.warning("Invalid Cart");
+    }
+    placeOrder({
+      onSuccess: (p) => router.push(`/orders/${p.id}`),
+      onError: (e) => toast.error(e.message),
+    });
+  };
 
   return (
     <Layout>

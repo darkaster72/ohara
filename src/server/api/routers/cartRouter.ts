@@ -1,4 +1,4 @@
-import { inferAsyncReturnType } from "@trpc/server";
+import { inferAsyncReturnType, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -35,11 +35,22 @@ export const CartRouter = createTRPCRouter({
   createCart: protectedProcedure
     .input(CartItemUpdateSchema)
     .mutation(async ({ ctx, input: { productId, quantity } }) => {
-      const { id: userId } = ctx.session.user;
+      const user = ctx.session.user;
+      const book = await ctx.prisma.book.findUniqueOrThrow({
+        where: { id: productId },
+      });
+      const total = book.currentPrice.toNumber() * quantity;
       return ctx.prisma.cart.create({
         data: {
-          userId: userId,
+          user: {
+            connectOrCreate: {
+              where: { email: user.email! },
+              create: { ...user },
+            },
+          },
           cartItems: { create: { quantity, bookId: productId } },
+          subtotal: total,
+          total: total,
         },
       });
     }),
@@ -72,6 +83,24 @@ export const CartRouter = createTRPCRouter({
           },
         });
       }
+      const cartWithItems = await ctx.prisma.cart.findUniqueOrThrow({
+        where: { code: cartCode },
+        select: {
+          cartItems: {
+            select: {
+              book: { select: { currentPrice: true } },
+              quantity: true,
+            },
+          },
+        },
+      });
+      const total = cartWithItems.cartItems
+        .map((item) => item.book.currentPrice.toNumber() * item.quantity)
+        .reduce((acc, cur) => acc + cur, 0);
+      await ctx.prisma.cart.update({
+        where: { code: cartCode },
+        data: { total: total, subtotal: total },
+      });
     }),
   updateAddress: protectedProcedure
     .input(ShippingAddressUpdateSchema)
@@ -93,6 +122,45 @@ export const CartRouter = createTRPCRouter({
         data: { cartItems: { deleteMany: {} } },
       });
     }),
+  placeOrder: protectedProcedure
+    .input(z.string().cuid())
+    .mutation(async ({ ctx, input: cartCode }) => {
+      const cart: ICart = await getCartById(ctx, cartCode);
+      if (!cart.cartItems.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Cannot place order for empty cart",
+        });
+      }
+      if (!cart.address) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Shipping Address not set",
+        });
+      }
+
+      return ctx.prisma.order.create({
+        data: {
+          cartCode: cart.code,
+          user: { connect: { id: cart.userId } },
+          address: { create: cart.address },
+          orderDate: new Date(),
+          total: cart.total,
+          subtotal: cart.subtotal,
+          lineItems: {
+            createMany: {
+              data: cart.cartItems.map((c) => ({
+                bookId: c.book.id,
+                quantity: c.quantity,
+                currentPrice: c.book.currentPrice,
+                price: c.book.price,
+                discount: c.book.discount,
+              })),
+            },
+          },
+        },
+      });
+    }),
 });
 
 export type ICart = inferAsyncReturnType<typeof getCartById>;
@@ -104,6 +172,8 @@ async function getCartById(ctx: TRPCContext, code: string) {
     select: {
       code: true,
       userId: true,
+      subtotal: true,
+      total: true,
       cartItems: {
         select: {
           id: true,
