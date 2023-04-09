@@ -4,6 +4,13 @@ import { type AppType } from "next/app";
 
 import { api } from "~/utils/api";
 
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+});
+
 import { Provider } from "jotai";
 import "rc-slider/assets/index.css";
 import "react-rater/lib/react-rater.css";
@@ -21,7 +28,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <Provider>
       <SessionProvider session={session}>
         <ToastContainer />
-        <Component {...pageProps} />
+        <main className={poppins.className}>
+          <Component {...pageProps} />
+        </main>
       </SessionProvider>
     </Provider>
   );
