@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -61,9 +62,9 @@ const CheckoutPage = () => {
           </div>
 
           <div className="cart-actions cart-actions--checkout">
-            <a href="/cart" className="cart__btn-back">
+            <Link href="/cart" className="cart__btn-back">
               <i className="icon-left"></i> Back
-            </a>
+            </Link>
             <div className="cart-actions__items-wrapper">
               <Link href="/cart">
                 <button type="button" className="btn btn--rounded btn--border">

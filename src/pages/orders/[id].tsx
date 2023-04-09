@@ -1,9 +1,10 @@
 import { Prisma } from "@prisma/client";
 import { DateTime } from "luxon";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { usePrice } from "~/hooks/usePrice";
 import Layout from "~/layouts/Main";
-import { ILineItem, IOrder } from "~/server/api/routers/orderRouter";
+import { type ILineItem, type IOrder } from "~/server/api/routers/orderRouter";
 import { api } from "~/utils/api";
 
 const OrderPage = () => {
@@ -53,8 +54,10 @@ const OrderPage = () => {
             <div className="flex  h-full w-full flex-col items-stretch justify-start md:flex-row md:space-x-6 lg:space-x-8 xl:flex-col xl:space-x-0 ">
               <div className="flex flex-shrink-0 flex-col items-start justify-start">
                 <div className="flex w-full  items-center  justify-center space-x-4 border-b border-gray-200 py-8 md:justify-start">
-                  <img
-                    src={`https://ui-avatars.com/api/?background=random&name=${order.user.name}`}
+                  <Image
+                    src={`https://ui-avatars.com/api/?background=random&name=${
+                      order.user.name ?? ""
+                    }`}
                     alt="avatar"
                   />
                   <div className=" flex flex-col items-start justify-start space-y-2">

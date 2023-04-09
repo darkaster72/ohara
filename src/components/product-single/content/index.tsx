@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { DateTime } from "luxon";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -16,7 +17,7 @@ const Content = ({ product }: ProductContent) => {
   const { status } = useSession();
   const addToCart = () => {
     if (status === "unauthenticated") {
-      signIn();
+      void signIn();
     }
     updateCartItem(product.id, quantity, {
       onSuccess: () => toast.success("Added to cart"),

@@ -1,17 +1,15 @@
-import { ImageResponse, NextRequest } from "next/server";
+import { ImageResponse, type NextRequest } from "next/server";
 
 export const config = {
   runtime: "edge",
 };
 
-export default async function handler(req: NextRequest) {
+export default function handler(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
   const title = searchParams.get("title")?.slice(0, 100) ?? "";
   const author = searchParams.get("author");
   const publisher = searchParams.get("publisher");
-  console.log("==============================");
-  console.log(title, author, publisher);
 
   return new ImageResponse(
     (

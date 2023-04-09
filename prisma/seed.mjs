@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 import books from "./data.json" assert { type: "json" };
 const prisma = new PrismaClient();
 
+// @ts-ignore
 const generateRandom = (min, max) =>
   Math.floor(Math.random() * (max - min)) + min;
 
@@ -23,13 +24,16 @@ const load = async () => {
     await prisma.publisher.deleteMany();
     console.log("Deleted records in publisher table");
 
+    // @ts-ignore
     const authors = _.uniq(books.flatMap((book) => book.authors.split("/")));
+    // @ts-ignore
     const publishers = _.uniq(books.map((book) => book.publisher));
     await prisma.publisher.createMany({
       data: publishers.map((p) => ({ name: p })),
     });
     await prisma.author.createMany({ data: authors.map((a) => ({ name: a })) });
 
+    // @ts-ignore
     books.forEach(async (book) => {
       const authors = book.authors.split("/");
       const { currentPrice, discount, price } = generatePrice();
@@ -56,9 +60,11 @@ const load = async () => {
             },
             authors: {
               connect: authors
+                // @ts-ignore
                 .map((author) => ({
                   name: author,
                 }))
+                // @ts-ignore
                 .reduce((acc, curr, i) => (acc[i] = curr), {}),
             },
           },

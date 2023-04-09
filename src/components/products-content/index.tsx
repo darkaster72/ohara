@@ -10,7 +10,7 @@ const ProductsContent = () => {
   return (
     <section className="products-content">
       <div className="products-content__intro">
-        {!!searchQuery && <h2>"{searchQuery}"</h2>}
+        {!!searchQuery && <h2>&quot;{searchQuery}&quot;</h2>}
         <button
           type="button"
           onClick={() => setOrderProductsOpen(!orderProductsOpen)}

@@ -24,7 +24,9 @@ const ShoppingCartItem = ({ book, quantity }: ICartItem) => {
         <div className="quantity-button">
           <button
             type="button"
-            onClick={() => updateCartItem(book.id, quantity - 1)}
+            onClick={() => {
+              updateCartItem(book.id, quantity - 1);
+            }}
             className="quantity-button__btn"
           >
             -
@@ -32,7 +34,9 @@ const ShoppingCartItem = ({ book, quantity }: ICartItem) => {
           <span>{quantity}</span>
           <button
             type="button"
-            onClick={() => updateCartItem(book.id, quantity + 1)}
+            onClick={() => {
+              updateCartItem(book.id, quantity + 1);
+            }}
             className="quantity-button__btn"
           >
             +
@@ -41,7 +45,12 @@ const ShoppingCartItem = ({ book, quantity }: ICartItem) => {
       </td>
       <td>{formattedPrice}</td>
       <td className="cart-item-cancel">
-        <i className="icon-cancel" onClick={() => removeCartItem(book.id)}></i>
+        <i
+          className="icon-cancel"
+          onClick={() => {
+            removeCartItem(book.id);
+          }}
+        ></i>
       </td>
     </tr>
   );

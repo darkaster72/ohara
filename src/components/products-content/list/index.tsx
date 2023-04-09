@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai";
 import { searchQueryAtom } from "~/atoms/searchAtom";
-import { ProductTypeList } from "~/types";
+import { type ProductTypeList } from "~/types";
 import { api } from "~/utils/api";
 import ProductItem from "../../product-item";
 import ProductsLoading from "./loading";
@@ -31,6 +31,7 @@ const ProductsContent = () => {
         <div className="flex justify-center">
           <button
             className="btn btn--rounded btn--border"
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onClick={() => fetchNextPage()}
           >
             Load more

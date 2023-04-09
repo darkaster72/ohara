@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 
@@ -6,7 +6,7 @@ interface Props {}
 
 const PublisherPage: NextPage<Props> = () => {
   const { id } = useRouter().query;
-  const { data } = api.book.getByPublisherId.useQuery(id as string, {
+  const { data } = api.book.getByPublisherId.useQuery(+(id as string), {
     enabled: !!id,
   });
   return (

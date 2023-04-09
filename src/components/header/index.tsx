@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { useAtom } from "jotai";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -11,7 +12,7 @@ import { useCart } from "~/hooks/useCart";
 import Logo from "../../assets/icons/logo";
 
 type HeaderType = {
-  isErrorPage?: Boolean;
+  isErrorPage?: boolean;
 };
 
 const Header = ({ isErrorPage }: HeaderType) => {

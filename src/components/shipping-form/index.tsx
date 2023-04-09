@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useCart } from "~/hooks/useCart";

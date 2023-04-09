@@ -5,8 +5,8 @@ import { Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useCallback } from "react";
 import { cartCode } from "~/atoms/cartAtom";
-import { ShippingForm } from "~/components/shipping-form";
-import { ICart, ICartItem } from "~/server/api/routers/cartRouter";
+import { type ShippingForm } from "~/components/shipping-form";
+import { type ICart, type ICartItem } from "~/server/api/routers/cartRouter";
 
 const cartApi = api.cart;
 
@@ -37,7 +37,8 @@ export const useCart = () => {
 
   const { mutate: placeOrderMutation } = cartApi.placeOrder.useMutation({
     onSuccess: () => {
-      utils.cart.invalidate(), setCartId(null);
+      void utils.cart.invalidate();
+      setCartId(null);
     },
   });
 
@@ -49,7 +50,7 @@ export const useCart = () => {
     onSuccess: () => utils.cart.invalidate(),
   });
 
-  const updateCartItem = async (
+  const updateCartItem = (
     productId: number,
     quantity?: number,
     callback?: Parameters<typeof updateCartItemMutation>[1]
@@ -78,7 +79,7 @@ export const useCart = () => {
     placeOrderMutation(cartId, callback);
   };
 
-  const removeCartItem = async (productId: number) => {
+  const removeCartItem = (productId: number) => {
     if (!cartId) throw new Error("Cart note available");
 
     updateCartItemMutation({
@@ -88,7 +89,7 @@ export const useCart = () => {
     });
   };
 
-  const clearCart = async () => {
+  const clearCart = () => {
     cartId && clearCartMutation(cartId);
   };
 

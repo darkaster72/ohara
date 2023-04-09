@@ -1,4 +1,9 @@
-import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
+import {
+  Controller,
+  type Control,
+  type FieldPath,
+  type FieldValues,
+} from "react-hook-form";
 
 interface Props<T extends FieldValues> {
   name: FieldPath<T>;
@@ -22,7 +27,7 @@ export default function FormField<T extends FieldValues>({
           <div className="form__col">
             <input
               {...field}
-              className={`form__input form__input--sm ${error && "error"}`}
+              className={`form__input form__input--sm ${error ? "error" : ""}`}
               type="text"
               placeholder={placeholder}
             />

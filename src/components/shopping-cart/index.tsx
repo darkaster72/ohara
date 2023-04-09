@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useCart } from "~/hooks/useCart";
 import { usePrice } from "~/hooks/usePrice";
 import CheckoutStatus from "../../components/checkout-status";
@@ -38,9 +39,9 @@ const ShoppingCart = () => {
         </div>
 
         <div className="cart-actions">
-          <a href="/products" className="cart__btn-back">
+          <Link href="/products" className="cart__btn-back">
             <i className="icon-left"></i> Continue Shopping
-          </a>
+          </Link>
           <input
             type="text"
             placeholder="Promo Code"
@@ -51,9 +52,12 @@ const ShoppingCart = () => {
             <p className="cart-actions__total">
               Total cost <strong>{formattedPrice}</strong>
             </p>
-            <a href="/cart/checkout" className="btn btn--rounded btn--yellow">
+            <Link
+              href="/cart/checkout"
+              className="btn btn--rounded btn--yellow"
+            >
               Checkout
-            </a>
+            </Link>
           </div>
         </div>
       </div>
