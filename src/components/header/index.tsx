@@ -23,6 +23,7 @@ const Header = ({ isErrorPage }: HeaderType) => {
     !arrayPaths.includes(router.pathname) || isErrorPage ? false : true
   );
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const navRef = useRef(null);
   const searchRef = useRef(null);
   const { data: session } = useSession();
@@ -85,7 +86,8 @@ const Header = ({ isErrorPage }: HeaderType) => {
         <div className="site-header__actions gap-2">
           <button
             ref={searchRef}
-            className={`search-form-wrapper search-form--active`}
+            className={`search-form-wrapper`}
+            onClick={() => setSearchOpen((prev) => !prev)}
           >
             <form className={`search-form`} onSubmit={handleSubmit(onSubmit)}>
               <i className="icon-cancel"></i>
@@ -115,7 +117,7 @@ const Header = ({ isErrorPage }: HeaderType) => {
             />
           )}
           <button onClick={() => (session?.user ? signOut() : signIn())}>
-            {session?.user ? "Logout" : "Login"}
+            {session?.user ? "" : "Login"}
           </button>
           <button
             onClick={() => setMenuOpen(true)}

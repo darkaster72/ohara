@@ -1,6 +1,6 @@
 import "swiper/css/autoplay";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { ProductTypeList } from "~/types";
+import { type ProductTypeList } from "~/types";
 import ProductItem from "./../../product-item";
 
 // import Swiper core and required components

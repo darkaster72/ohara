@@ -6,14 +6,14 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useCart } from "~/hooks/useCart";
 import { usePrice } from "~/hooks/usePrice";
-import { IProduct } from "~/types";
+import { type IProduct } from "~/types";
 
 type ProductContent = {
   product: IProduct;
 };
 
 const Content = ({ product }: ProductContent) => {
-  const { updateCartItem, cart, getItem } = useCart();
+  const { updateCartItem, getItem } = useCart();
   const { status } = useSession();
   const addToCart = () => {
     if (status === "unauthenticated") {

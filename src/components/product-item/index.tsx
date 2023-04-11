@@ -2,13 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useImage } from "~/hooks/useImage";
 import { usePrice } from "~/hooks/usePrice";
-import { ProductTypeList } from "~/types";
+import { type ProductTypeList } from "~/types";
 
 const ProductItem = (item: ProductTypeList) => {
   const { id, title } = item;
   const { discount, isDiscounted, formattedPrice, originalPrice } =
     usePrice(item);
-  const image = useImage(item);
+  const image = useImage(item, "card");
   return (
     <Link href={`/products/${id}`} className="product-item">
       <div className="product__image">

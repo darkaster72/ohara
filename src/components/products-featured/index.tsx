@@ -3,7 +3,7 @@ import { api } from "~/utils/api";
 import ProductsCarousel from "./carousel";
 
 const ProductsFeatured = () => {
-  const { data } = api.book.getAllBooks.useQuery();
+  const { data } = api.book.infiniteBooks.useQuery({ limit: 4 });
 
   return (
     <section className="section section-products-featured">
@@ -15,7 +15,7 @@ const ProductsFeatured = () => {
           </Link>
         </header>
 
-        <ProductsCarousel products={data} />
+        <ProductsCarousel products={data?.items} />
       </div>
     </section>
   );
