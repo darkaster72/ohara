@@ -86,7 +86,7 @@ const Header = ({ isErrorPage }: HeaderType) => {
         <div className="site-header__actions gap-2">
           <button
             ref={searchRef}
-            className={`search-form-wrapper`}
+            className={`search-form-wrapper search-form--active`}
             onClick={() => setSearchOpen((prev) => !prev)}
           >
             <form className={`search-form`} onSubmit={handleSubmit(onSubmit)}>
