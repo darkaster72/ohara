@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useAtom } from "jotai";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -124,11 +124,17 @@ export default Header;
 
 function AuthMenu() {
   const { data: session, status } = useSession();
+  const [open, setOpen] = useState(false);
+  const dropDownRef = useRef(null);
+  useOnClickOutside(dropDownRef, () => setOpen(false));
+
   return (
     <>
       {session?.user.image && (
         <Image
-          className="ml-2 inline-block rounded-full ring-2 ring-white"
+          id="dropdownHoverButton"
+          className="ml-2 inline-block cursor-pointer rounded-full ring-2 ring-white"
+          onClick={() => setOpen((prev) => !prev)}
           src={session.user.image}
           title={session.user.name ?? ""}
           width="32"
@@ -136,6 +142,44 @@ function AuthMenu() {
           alt={session.user.name ?? "User Profile image"}
         />
       )}
+      {open && (
+        <div
+          ref={dropDownRef}
+          id="dropdownHover"
+          className="absolute top-20 z-10 w-44 divide-y divide-gray-100 rounded-lg bg-white shadow "
+        >
+          <ul
+            className="w-full py-2 text-sm text-gray-700"
+            aria-labelledby="dropdownHoverButton"
+          >
+            <li>
+              <Link
+                href="/orders"
+                className="block px-4 py-2 hover:bg-gray-100 "
+              >
+                My Orders
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="#"
+                className="block px-4 py-2 hover:bg-gray-100  dark:hover:text-white"
+              >
+                Settings
+              </Link>
+            </li>
+            <li>
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="block px-4 py-2 hover:bg-gray-100  dark:hover:text-white"
+              >
+                Sign out
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
+
       {status == "unauthenticated" && (
         <button onClick={() => signIn()}>Login</button>
       )}

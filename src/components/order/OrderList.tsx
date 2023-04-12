@@ -50,35 +50,34 @@ export function OrderList({ orders }: Props) {
           </div>
           <div className="mt-7 overflow-x-auto">
             <table className="w-full whitespace-nowrap">
-              <th className="flex h-16 items-center justify-around rounded">
-                <td className="border border-gray-400">
+              <tr className="flex h-16 items-center justify-around rounded">
+                <th className="border border-gray-400">
                   <div className="flex items-center pl-5">
                     <p className="mr-2 text-base font-medium leading-none text-gray-700">
                       Order Id
                     </p>
                   </div>
-                </td>
-                <td className="pl-24">
+                </th>
+                <th className="pl-24">
                   <div className="flex items-center">
                     <p className="ml-2 text-sm leading-none text-gray-600">
                       Total
                     </p>
                   </div>
-                </td>
-                <td className="pl-5">
+                </th>
+                <th className="pl-5">
                   <div className="flex items-center">
                     <p className="ml-2 text-sm leading-none text-gray-600">
                       Date
                     </p>
                   </div>
-                </td>
-                <td className="pl-4">
+                </th>
+                <th className="pl-4">
                   <button className="rounded py-3 px-5 text-sm leading-none text-gray-600">
                     Action
                   </button>
-                </td>
-                <td></td>
-              </th>
+                </th>
+              </tr>
               <tbody className="flex flex-col gap-2">
                 {orders.map((order) => (
                   <OrderLine order={order} key={order.id} />
@@ -134,7 +133,6 @@ function OrderLine({ order }: OrderLineProps): JSX.Element {
           View
         </Link>
       </td>
-      <td></td>
     </tr>
   );
 }
