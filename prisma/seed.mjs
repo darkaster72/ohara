@@ -75,7 +75,7 @@ const load = async () => {
       }
     });
 
-    console.log("Added book data");
+    console.log("Adding book data");
   } catch (e) {
     console.error(e);
     process.exit(1);

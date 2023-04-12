@@ -10,8 +10,8 @@ const Footer = () => {
               <Logo /> Ohara
             </h6>
             <p>
-              House My Brand designs clothing for the young, the old & everyone
-              in between – but most importantly, for the fashionable
+              Ohara a library like no other, bringing you timeless treasure of
+              knowledge
             </p>
             <ul className="site-footer__social-networks">
               <li>

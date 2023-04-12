@@ -28,7 +28,7 @@ const IndexPage = () => {
             className="featured-item featured-item-small-first"
           >
             <div className="featured-item__content">
-              <h3>Basic t-shirts $29,99</h3>
+              <h3>Audiobooks</h3>
               <a href="#" className="btn btn--rounded">
                 More details
               </a>
