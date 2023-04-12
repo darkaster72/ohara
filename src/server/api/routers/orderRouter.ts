@@ -1,15 +1,19 @@
-import { inferAsyncReturnType } from "@trpc/server";
+import { type inferAsyncReturnType } from "@trpc/server";
 import { z } from "zod";
 import {
   createTRPCRouter,
   protectedProcedure,
-  TRPCContext,
+  type TRPCContext,
 } from "~/server/api/trpc";
 
 export const OrderRouter = createTRPCRouter({
   getById: protectedProcedure
     .input(z.number())
     .query(({ ctx, input }) => getOrderById(ctx, input)),
+  getAll: protectedProcedure.query(({ ctx }) => {
+    const userId = ctx.session.user.id;
+    return ctx.prisma.order.findMany({ where: { userId } });
+  }),
 });
 
 export type IOrder = inferAsyncReturnType<typeof getOrderById>;

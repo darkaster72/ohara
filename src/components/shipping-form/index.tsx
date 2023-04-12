@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { useCart } from "~/hooks/useCart";
 import FormField from "../form-field";
 
@@ -29,7 +30,7 @@ export default function ShippingAddress() {
     defaultValues: FormDefaultValue,
   });
   const onSubmit = (value: ShippingForm) => {
-    updateAddress(value);
+    updateAddress(value, { onSuccess: () => toast.success("Address updated") });
   };
   useEffect(() => {
     cart?.address && reset(cart.address);

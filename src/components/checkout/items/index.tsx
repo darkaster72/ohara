@@ -1,6 +1,6 @@
 import { useCart } from "~/hooks/useCart";
 import { usePrice } from "~/hooks/usePrice";
-import { ICartItem } from "~/server/api/routers/cartRouter";
+import { type ICartItem } from "~/server/api/routers/cartRouter";
 
 const CheckoutItems = () => {
   const { cart } = useCart();

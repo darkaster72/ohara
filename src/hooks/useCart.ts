@@ -69,9 +69,12 @@ export const useCart = () => {
     }
   };
 
-  const updateAddress = (address: ShippingForm) => {
+  const updateAddress = (
+    address: ShippingForm,
+    callback?: Parameters<typeof updateAddressMutation>[1]
+  ) => {
     if (!cartId) throw new Error("Cart note available");
-    updateAddressMutation({ address, cartCode: cartId });
+    updateAddressMutation({ address, cartCode: cartId }, callback);
   };
 
   const placeOrder = (callback?: Parameters<typeof placeOrderMutation>[1]) => {

@@ -58,6 +58,8 @@ const OrderPage = () => {
                     src={`https://ui-avatars.com/api/?background=random&name=${
                       order.user.name ?? ""
                     }`}
+                    width="32"
+                    height="32"
                     alt="avatar"
                   />
                   <div className=" flex flex-col items-start justify-start space-y-2">
