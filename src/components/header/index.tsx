@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useAtom } from "jotai";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -26,7 +26,6 @@ const Header = ({ isErrorPage }: HeaderType) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const navRef = useRef(null);
   const searchRef = useRef(null);
-  const { data: session } = useSession();
   const { cart } = useCart();
 
   const headerClass = () => {
@@ -106,19 +105,7 @@ const Header = ({ isErrorPage }: HeaderType) => {
               )}
             </button>
           </Link>
-          {session?.user.image && (
-            <Image
-              className="ml-2 inline-block rounded-full ring-2 ring-white"
-              src={session.user.image}
-              title={session.user.name ?? ""}
-              width="32"
-              height="32"
-              alt={session.user.name ?? "User Profile image"}
-            />
-          )}
-          <button onClick={() => (session?.user ? signOut() : signIn())}>
-            {session?.user ? "" : "Login"}
-          </button>
+          <AuthMenu />
           <button
             onClick={() => setMenuOpen(true)}
             className="site-header__btn-menu"
@@ -134,3 +121,24 @@ const Header = ({ isErrorPage }: HeaderType) => {
 };
 
 export default Header;
+
+function AuthMenu() {
+  const { data: session, status } = useSession();
+  return (
+    <>
+      {session?.user.image && (
+        <Image
+          className="ml-2 inline-block rounded-full ring-2 ring-white"
+          src={session.user.image}
+          title={session.user.name ?? ""}
+          width="32"
+          height="32"
+          alt={session.user.name ?? "User Profile image"}
+        />
+      )}
+      {status == "unauthenticated" && (
+        <button onClick={() => signIn()}>Login</button>
+      )}
+    </>
+  );
+}
