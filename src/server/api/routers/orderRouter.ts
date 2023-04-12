@@ -5,6 +5,7 @@ import {
   protectedProcedure,
   type TRPCContext,
 } from "~/server/api/trpc";
+import { type RouterOutputs } from "~/utils/api";
 
 export const OrderRouter = createTRPCRouter({
   getById: protectedProcedure
@@ -18,6 +19,7 @@ export const OrderRouter = createTRPCRouter({
 
 export type IOrder = inferAsyncReturnType<typeof getOrderById>;
 export type ILineItem = IOrder["lineItems"][0];
+export type IOrderList = RouterOutputs["order"]["getAll"];
 
 async function getOrderById(ctx: TRPCContext, code: number) {
   return await ctx.prisma.order.findUniqueOrThrow({

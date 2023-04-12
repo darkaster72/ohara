@@ -22,7 +22,7 @@ const OrderPage = () => {
 
   return (
     <Layout>
-      <div className="py-14 px-4 2xl:container md:px-6 2xl:mx-auto 2xl:px-20">
+      <div className="py-14 px-4 2xl:container md:px-16 2xl:mx-auto 2xl:px-20">
         <div className="item-start flex flex-col justify-start space-y-2 ">
           <h1 className="text-3xl font-semibold leading-7 text-gray-800 lg:text-4xl  lg:leading-9">
             Order #{order.id}
