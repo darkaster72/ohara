@@ -10,7 +10,7 @@ import Layout from "../../layouts/Main";
 
 const Product = () => {
   const id = +(useRouter().query.id as string);
-  const { data: product } = api.book.getByBookId.useQuery(id, {
+  const { data: product, isLoading } = api.book.getByBookId.useQuery(id, {
     enabled: !!id,
   });
 
@@ -24,6 +24,7 @@ const Product = () => {
           <div className="product-single__content">
             <Gallery images={[url]} />
             {product && <Content product={product} />}
+            {isLoading && <p>Loading</p>}
           </div>
         </div>
       </section>
