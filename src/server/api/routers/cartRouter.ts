@@ -1,9 +1,9 @@
-import { inferAsyncReturnType, TRPCError } from "@trpc/server";
+import { TRPCError, type inferAsyncReturnType } from "@trpc/server";
 import { z } from "zod";
 import {
   createTRPCRouter,
   protectedProcedure,
-  TRPCContext,
+  type TRPCContext,
 } from "~/server/api/trpc";
 
 const CartItemUpdateSchema = z.object({
@@ -39,6 +39,14 @@ export const CartRouter = createTRPCRouter({
       const book = await ctx.prisma.book.findUniqueOrThrow({
         where: { id: productId },
       });
+
+      if (book.quantityAvailable < quantity) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Product with quantity ${quantity} is not available`,
+        });
+      }
+
       const total = book.currentPrice.toNumber() * quantity;
       return ctx.prisma.cart.create({
         data: {
@@ -71,6 +79,13 @@ export const CartRouter = createTRPCRouter({
           });
         }
 
+        if (existingCartItem.book.quantityAvailable < quantity) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: `Product with quantity ${quantity} is not available`,
+          });
+        }
+
         await ctx.prisma.cartItem.update({
           where: { id: existingCartItem.id },
           data: { quantity: quantity },
@@ -97,7 +112,7 @@ export const CartRouter = createTRPCRouter({
       const total = cartWithItems.cartItems
         .map((item) => item.book.currentPrice.toNumber() * item.quantity)
         .reduce((acc, cur) => acc + cur, 0);
-      await ctx.prisma.cart.update({
+      return await ctx.prisma.cart.update({
         where: { code: cartCode },
         data: { total: total, subtotal: total },
       });
@@ -126,12 +141,14 @@ export const CartRouter = createTRPCRouter({
     .input(z.string().cuid())
     .mutation(async ({ ctx, input: cartCode }) => {
       const cart: ICart = await getCartById(ctx, cartCode);
+
       if (!cart.cartItems.length) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Cannot place order for empty cart",
         });
       }
+
       if (!cart.address) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -139,26 +156,49 @@ export const CartRouter = createTRPCRouter({
         });
       }
 
-      return ctx.prisma.order.create({
-        data: {
-          cartCode: cart.code,
-          user: { connect: { id: cart.userId } },
-          address: { create: cart.address },
-          orderDate: new Date(),
-          total: cart.total,
-          subtotal: cart.subtotal,
-          lineItems: {
-            createMany: {
-              data: cart.cartItems.map((c) => ({
-                bookId: c.book.id,
-                quantity: c.quantity,
-                currentPrice: c.book.currentPrice,
-                price: c.book.price,
-                discount: c.book.discount,
-              })),
+      const outOfStockItems = cart.cartItems.filter(
+        (item) => item.quantity > item.book.quantityAvailable
+      );
+
+      if (outOfStockItems.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Some items are no longer availble",
+        });
+      }
+
+      return await ctx.prisma.$transaction(async (tx) => {
+        const order = await tx.order.create({
+          data: {
+            cartCode: cart.code,
+            user: { connect: { id: cart.userId } },
+            address: { create: cart.address! },
+            orderDate: new Date(),
+            total: cart.total,
+            subtotal: cart.subtotal,
+            lineItems: {
+              createMany: {
+                data: cart.cartItems.map((c) => ({
+                  bookId: c.book.id,
+                  quantity: c.quantity,
+                  currentPrice: c.book.currentPrice,
+                  price: c.book.price,
+                  discount: c.book.discount,
+                })),
+              },
             },
           },
-        },
+        });
+
+        for (const item of cart.cartItems) {
+          await tx.book.update({
+            data: {
+              quantityAvailable: item.book.quantityAvailable - item.quantity,
+            },
+            where: { id: item.book.id },
+          });
+        }
+        return order;
       });
     }),
 });
@@ -185,6 +225,7 @@ async function getCartById(ctx: TRPCContext, code: string) {
               currentPrice: true,
               discount: true,
               title: true,
+              quantityAvailable: true,
             },
           },
         },

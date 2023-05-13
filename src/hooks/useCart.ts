@@ -53,7 +53,7 @@ export const useCart = () => {
   const updateCartItem = (
     productId: number,
     quantity?: number,
-    callback?: Parameters<typeof updateCartItemMutation>[1]
+    callback?: Parameters<typeof createCartMutation>[1]
   ) => {
     if (cartId) {
       updateCartItemMutation(
@@ -65,7 +65,7 @@ export const useCart = () => {
         callback
       );
     } else {
-      createCartMutation({ productId, quantity });
+      createCartMutation({ productId, quantity }, callback);
     }
   };
 

@@ -21,6 +21,7 @@ const Content = ({ product }: ProductContent) => {
     }
     updateCartItem(product.id, quantity, {
       onSuccess: () => toast.success("Added to cart"),
+      onError: (error) => toast.error(error.message),
     });
   };
   const { formattedPrice, isDiscounted, originalPrice } = usePrice(product);
