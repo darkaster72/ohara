@@ -764,6 +764,7 @@ h1,h2,h3,h4,h5 {
 }
 
 .product-item {
+  padding-top: 16px;
   &.product-item--loading {
     .product__image, .product__description h3, .product__price h4 {
       &:before {
@@ -875,6 +876,17 @@ h1,h2,h3,h4,h5 {
       z-index: 10;
       position: relative;
       background-color: var(--color-orange);
+    }
+    .out__of__stock {
+      color: #FFF;
+      padding: 5px 9px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 12px;
+      z-index: 10;
+      margin-left: 8px;
+      position: relative;
+      background-color: var(--color-red);
     }
   }
   .product__description {

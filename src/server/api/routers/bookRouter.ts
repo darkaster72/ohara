@@ -14,6 +14,7 @@ export const BookRouter = createTRPCRouter({
           price: true,
           currentPrice: true,
           discount: true,
+          quantityAvailable: true,
         },
         take: 20,
       });
@@ -37,6 +38,7 @@ export const BookRouter = createTRPCRouter({
           price: true,
           currentPrice: true,
           discount: true,
+          quantityAvailable: true,
         },
         where: search ? { title: { search } } : {},
         cursor: cursor ? { id: cursor.valueOf() } : undefined,

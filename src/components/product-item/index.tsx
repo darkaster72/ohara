@@ -5,10 +5,12 @@ import { usePrice } from "~/hooks/usePrice";
 import { type ProductTypeList } from "~/types";
 
 const ProductItem = (item: ProductTypeList) => {
-  const { id, title } = item;
+  const { id, title, quantityAvailable } = item;
   const { discount, isDiscounted, formattedPrice, originalPrice } =
     usePrice(item);
   const image = useImage(item, "card");
+  const outOfStock = !quantityAvailable;
+
   return (
     <Link href={`/products/${id}`} className="product-item">
       <div className="product__image">
@@ -18,6 +20,7 @@ const ProductItem = (item: ProductTypeList) => {
             {discount.round().toNumber()}% Off
           </span>
         )}
+        {outOfStock && <span className="out__of__stock">Out of Stock</span>}
       </div>
 
       <div className="product__description">

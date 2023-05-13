@@ -26,6 +26,7 @@ const Content = ({ product }: ProductContent) => {
   const { formattedPrice, isDiscounted, originalPrice } = usePrice(product);
   const cartItem = getItem(product.id);
   const [quantity, setQuantity] = useState(cartItem?.quantity ?? 1);
+  const outOfStock = !product.quantityAvailable;
 
   return (
     <section className="product-content">
@@ -87,37 +88,42 @@ const Content = ({ product }: ProductContent) => {
             </span>
           </h5>
         </div>
-        <div className="product-filter-item">
-          <h5>Quantity:</h5>
-          <div className="quantity-buttons">
-            <div className="quantity-button">
+        {!outOfStock && (
+          <div className="product-filter-item">
+            <h5>Quantity:</h5>
+            <div className="quantity-buttons">
+              <div className="quantity-button">
+                <button
+                  type="button"
+                  disabled={quantity === 0}
+                  onClick={() => setQuantity((i) => i - 1)}
+                  className="quantity-button__btn"
+                >
+                  -
+                </button>
+                <span>{quantity}</span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity((i) => i + 1)}
+                  className="quantity-button__btn"
+                >
+                  +
+                </button>
+              </div>
+
               <button
-                type="button"
-                disabled={quantity === 0}
-                onClick={() => setQuantity((i) => i - 1)}
-                className="quantity-button__btn"
+                type="submit"
+                onClick={() => addToCart()}
+                className="btn btn--rounded btn--yellow"
               >
-                -
-              </button>
-              <span>{quantity}</span>
-              <button
-                type="button"
-                onClick={() => setQuantity((i) => i + 1)}
-                className="quantity-button__btn"
-              >
-                +
+                Add to cart
               </button>
             </div>
-
-            <button
-              type="submit"
-              onClick={() => addToCart()}
-              className="btn btn--rounded btn--yellow"
-            >
-              Add to cart
-            </button>
           </div>
-        </div>
+        )}
+        {outOfStock && (
+          <p className="text-red-500">Sorry product out of Stock!</p>
+        )}
       </div>
     </section>
   );
